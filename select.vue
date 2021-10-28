@@ -1,0 +1,162 @@
+<!--  -->
+
+<template lang='pug'>
+.vf-field.vf-select(@focusout='focusOut')
+	label.vf-label-above(:for='name') {{ label }}
+	.select
+		select(
+			:id='name'
+			:class='classes'
+			:name='name'
+			:aria-label='label'
+			:required='required'
+			:disabled='readonly'
+			v-model='state'
+			v-if='options.length'
+		)
+			option(
+				value=''
+				v-if='placeholder'
+			) {{ placeholder }}
+			option(
+				v-for='option in optionsComputed'
+				:value='option.value'
+			) {{ option.label }}
+
+		form-vf-tooltip-button(v-if='tooltip' :tooltipActive='tooltipActive' @click.native='tooltipClick')
+
+		//- Down arrow icon
+		svg.icon(height="16" viewBox="0 0 16 16" width="16" xmlns="http://www.w3.org/2000/svg"): path(d="m16 5.5-2-2-6 6-6-6-2 2 8 8z")
+
+	//- Error message
+	transition(name='vf-slide'): .vf-error-message(v-if='error && !tooltipActive') {{ error }}
+	//- Tooltip message
+	transition(name='vf-slide'): .vf-tooltip-message(v-if='tooltipActive') {{ tooltip }}
+
+
+</template>
+
+<!-- ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– -->
+
+<script lang='coffee'>
+import inputMixin from './input-mixin'
+import fieldMixin from './field-mixin'
+
+export default
+
+	mixins: [
+		inputMixin
+		fieldMixin
+	]
+
+	props:
+		options:
+			type: Array
+			default: -> []
+
+		name:
+			type: String
+			default: ''
+
+		labelAbove:
+			type: Boolean
+			default: true
+
+		placeholder:
+			type: [String, Boolean]
+			default: '--Choose an option--'
+
+		disabled:
+			type: Boolean
+			default: false
+
+	computed:
+		optionsComputed: -> @options?.map (option) =>
+			arr = option?.split?(/(?:\s)+(?:\|)+(?:\s)+/)
+			return
+				label: arr?[0]
+				value: arr?[1] || arr?[0]
+
+		classes: -> [
+			...@commonClasses
+		]
+
+</script>
+
+<!-- ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– -->
+
+<style lang='stylus'>
+@import './form-definitions.styl'
+
+.vf-select
+	// Limit width to select's width
+	display inline-block
+	position relative
+	cursor pointer
+	width 100%
+
+	label
+		color form-color-base
+		display block
+		padding-bottom form-input-label-above-padding
+
+	.select
+		position relative
+
+	select
+		min-width 250px
+		border none
+		cursor pointer
+		display block
+		font-weight bold
+		color form-color-base
+		width 100%
+		// Height
+		fluid height, form-input-height, form-input-height-min
+		// Padding
+		fluid padding-h, form-input-padding-h, form-input-padding-h-min
+		// Outline
+		outline form-outline-width solid form-outline-base
+		border-radius form-input-radius
+
+		&:not([disabled])
+			// Hover state
+			+hover()
+				outline-color form-outline-hover
+				color form-color-hover
+				background form-bkg-hover
+
+			// Focus state
+			&:focus, &:active
+				transition-duration (form-base-speed/2)
+				outline form-outline-width solid form-outline-focus
+				color form-color-focus
+				background form-bkg-focus
+				outline-offset form-outline-offset
+
+		// Error state
+		&.error
+			outline-color form-outline-error
+			color form-color-error
+			background form-bkg-error
+
+		// Disabled state
+		&[disabled]
+			&, &::placeholder
+				color grey
+				opacity 1
+
+	// Chevron icon
+	.icon
+		position absolute
+		display block
+		color form-color-base
+		fluid right, form-input-padding-h, form-input-padding-h-min
+		top 50%
+		transform translateY(-50%)
+		pointer-events none
+
+	.vf-tooltip-btn
+		right 42px
+
+</style>
