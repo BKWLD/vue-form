@@ -1,10 +1,7 @@
 // Default vars
 // Override these in your definitions.styl
 // Or override them in your components by setting a CSS variable of the same name.
-
-// vue-form variables
-// form-easing-function = ease-out-back-4
-// form-color = grey
+_blue = #4060b0
 
 // Font Colors (all fields)
 form-color-base ?= black
@@ -14,14 +11,14 @@ form-color-error ?= #ec1c23
 
 // Background Colors (all fields)
 form-bkg-base ?= transparent
-form-bkg-hover ?= rgba(black, 0.03)
-form-bkg-focus ?= form-bkg-hover
+form-bkg-hover ?= rgba(_blue, 0.01)
+form-bkg-focus ?= rgba(_blue, 0.03)
 form-bkg-error ?= rgba(form-color-error, 0.03)
 
 // Outline Colors (all fields)
-form-outline-base ?= rgba(black, 0.3)
-form-outline-hover ?= rgba(black, 0.6)
-form-outline-focus ?= rgba(black, 0.8)
+form-outline-base ?= rgba(black, 0.2)
+form-outline-hover ?= rgba(_blue, 0.4)
+form-outline-focus ?= rgba(_blue, 0.6)
 form-outline-error ?= rgba(form-color-error, 0.6)
 
 // Outline Style (all fields)
@@ -32,12 +29,12 @@ form-outline-offset ?= 0px
 form-base-speed ?= 200ms
 form-easing-function ?= ease-out-quint
 
-// Textfields & select fields
+// Input & select fields
 form-input-height ?= 60px
 form-input-height-min ?= 50px
 form-input-padding-h ?= 15px
 form-input-padding-h-min ?= 12px
-form-input-radius ?= 5px
+form-input-radius ?= 8px
 form-input-label-above-padding ?= 5px // Padding between ".vf-label-above" and the input below it
 
 // Checkbox

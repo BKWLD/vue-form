@@ -11,9 +11,9 @@
 		//- Input (hidden)
 		input(
 			type='checkbox'
-			v-model='state'
 			:name='name'
 			:id='name'
+			v-model='value'
 		)
 		//- Visual checkbox
 		.checkbox-bkg
@@ -35,12 +35,11 @@
 <!-- ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– -->
 
 <script lang='coffee'>
-import fieldMixin from './field-mixin'
+import isField from '../concerns/is-field'
+import hasValidation from '../concerns/has-validation'
 
 export default
-	mixins: [
-		fieldMixin
-	]
+	mixins: [ isField, hasValidation ]
 
 	props:
 		name: String
@@ -65,7 +64,7 @@ export default
 
 <style lang='stylus'>
 
-@import './form-definitions.styl'
+@import '../assets/field-styles.styl'
 
 .vf-checkbox
 	color form-color-base

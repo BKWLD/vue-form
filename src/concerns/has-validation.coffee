@@ -1,3 +1,5 @@
+import { required, email, url, notUrl, ipAddress, notIpAddress } from '../services/validators'
+
 export default
 	props:
 		# Pass in array of validators to this field.
@@ -13,12 +15,15 @@ export default
 
 	watch:
 		# Validate this field immediately each time the field value changes.
-		state: -> @validate()
+		value: -> 
+			console.log "watch value. validate...", @value
+			@validate()
 
 	methods:
 		
 		# Our main validation function
 		validate: ->
+			console.log 'validate', @name, @value
 
 			# If no rules, return true
 			if !@rules?.length
@@ -32,7 +37,7 @@ export default
 			errorMessage = ''
 			passedAllRules = @rules.every (ruleArg, index) =>
 				rule = @getRuleFunction ruleArg
-				errorMessage = rule(@state)
+				errorMessage = rule(@value)
 
 				# Default message if ruleFunction returns false
 				if errorMessage == false then errorMessage = "Error: This field is invalid"

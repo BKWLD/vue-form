@@ -1,7 +1,7 @@
 <!--  -->
 
 <template lang='pug'>
-form(
+form.vf-form(
 	v-on:submit.prevent='onSubmit'
 )
 	slot(
@@ -20,16 +20,14 @@ form(
 <!-- ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– -->
 
 <script lang='coffee'>
-import { required, email, notUrl, notIpAddress } from './form-validators'
-
 export default
-	name: 'Form'
+	name: 'VueForm'
 
 	props:
-		rules:
-			type: Object
+		# Submit callback
 		submit:
 			type: Function
+		# Form data object.  For syncing to parent component data, if desired.
 		form:
 			type: Object
 
@@ -98,7 +96,7 @@ export default
 
 <!-- ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– -->
 
-<style lang='stylus' scoped>
+<style lang='stylus'>
 
 
 

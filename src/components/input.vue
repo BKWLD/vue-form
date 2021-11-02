@@ -1,82 +1,77 @@
-<!--  -->
+<!-- A standard textfield input -->
 
 <template lang='pug'>
-.vf-field.vf-select(@focusout='focusOut')
-	label.vf-label-above(:for='name') {{ label }}
-	.select
-		select(
-			:id='name'
+.vf-field.vf-inputfield(@focusout='focusOut')
+	label.vf-label-above(:for='name' v-if='label') {{ label }}
+	.input-wrap
+		input(
 			:class='classes'
 			:name='name'
+			:id='name'
+			:placeholder='placeholder'
 			:aria-label='label'
+			:type='type'
 			:required='required'
 			:disabled='readonly'
-			v-model='state'
-			v-if='options.length'
+			:autocomplete='autocomplete'
+			:autocorrect='autocorrect'
+			:autocapitalize='autocapitalize'
+			:minlength='minlength'
+			:maxlength='maxlength'
+			v-model='value'
 		)
-			option(
-				value=''
-				v-if='placeholder'
-			) {{ placeholder }}
-			option(
-				v-for='option in optionsComputed'
-				:value='option.value'
-			) {{ option.label }}
 
 		form-vf-tooltip-button(v-if='tooltip' :tooltipActive='tooltipActive' @click.native='tooltipClick')
-
-		//- Down arrow icon
-		svg.icon(height="16" viewBox="0 0 16 16" width="16" xmlns="http://www.w3.org/2000/svg"): path(d="m16 5.5-2-2-6 6-6-6-2 2 8 8z")
 
 	//- Error message
 	transition(name='vf-slide'): .vf-error-message(v-if='error && !tooltipActive') {{ error }}
 	//- Tooltip message
 	transition(name='vf-slide'): .vf-tooltip-message(v-if='tooltipActive') {{ tooltip }}
-
-
 </template>
 
 <!-- ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– -->
 
 <script lang='coffee'>
-import inputMixin from './input-mixin'
-import fieldMixin from './field-mixin'
+import isField from '../concerns/is-field'
+import hasValidation from '../concerns/has-validation'
 
 export default
+	name: 'InputField'
 
-	mixins: [
-		inputMixin
-		fieldMixin
-	]
+	mixins: [ isField, hasValidation ]
 
 	props:
-		options:
-			type: Array
-			default: -> []
 
-		name:
+		# Type of textfield
+		type:
 			type: String
-			default: ''
-
-		labelAbove:
-			type: Boolean
-			default: true
+			default: 'text'
 
 		placeholder:
-			type: [String, Boolean]
-			default: '--Choose an option--'
+			type: String
+			default: null
 
-		disabled:
-			type: Boolean
-			default: false
+		autocomplete:
+			type: String
+			default: 'off'
+
+		autocorrect:
+			type: String
+			default: 'on'
+
+		autocapitalize:
+			type: String
+			default: 'on'
+
+		minlength:
+			type: String
+			default: '1'
+
+		maxlength:
+			type: String
+			default: '100'
 
 	computed:
-		optionsComputed: -> @options?.map (option) =>
-			arr = option?.split?(/(?:\s)+(?:\|)+(?:\s)+/)
-			return
-				label: arr?[0]
-				value: arr?[1] || arr?[0]
-
 		classes: -> [
 			...@commonClasses
 		]
@@ -86,38 +81,39 @@ export default
 <!-- ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– -->
 
 <style lang='stylus'>
-@import './form-definitions.styl'
+// Not scoped so it's easier to override
 
-.vf-select
-	// Limit width to select's width
-	display inline-block
-	position relative
-	cursor pointer
+@import '../assets/field-styles.styl'
+
+.vf-inputfield
 	width 100%
+	color form-color-base
 
 	label
-		color form-color-base
 		display block
-		padding-bottom form-input-label-above-padding
+		position relative
+		margin-bottom form-input-label-above-padding
 
-	.select
+	.input-wrap
 		position relative
 
-	select
-		min-width 250px
-		border none
-		cursor pointer
-		display block
-		font-weight bold
-		color form-color-base
+	input
+		// Fill container
 		width 100%
-		// Height
+
+		// Give it a fluid height
 		fluid height, form-input-height, form-input-height-min
-		// Padding
+
+		// Push text away from margins
 		fluid padding-h, form-input-padding-h, form-input-padding-h-min
+
 		// Outline
 		outline form-outline-width solid form-outline-base
+		border none
 		border-radius form-input-radius
+
+		// Animation
+		transition color form-base-speed
 
 		&:not([disabled])
 			// Hover state
@@ -127,9 +123,9 @@ export default
 				background form-bkg-hover
 
 			// Focus state
-			&:focus, &:active
+			&:focus
 				transition-duration (form-base-speed/2)
-				outline form-outline-width solid form-outline-focus
+				outline-color form-outline-focus
 				color form-color-focus
 				background form-bkg-focus
 				outline-offset form-outline-offset
@@ -146,17 +142,16 @@ export default
 				color grey
 				opacity 1
 
-	// Chevron icon
-	.icon
-		position absolute
-		display block
-		color form-color-base
-		fluid right, form-input-padding-h, form-input-padding-h-min
-		top 50%
-		transform translateY(-50%)
-		pointer-events none
+		&::-webkit-outer-spin-button,
+		&::-webkit-inner-spin-button
+			-webkit-appearance none
+			margin 0
 
-	.vf-tooltip-btn
-		right 42px
+		[type=number]
+			-moz-appearance textfield
+
+	// transparent placeholder on focus
+	input:focus::placeholder
+		color transparent
 
 </style>
