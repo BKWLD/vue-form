@@ -38,7 +38,7 @@ export default
 	# 	value: -> @$emit 'input', @value
 
 	mounted: -> @$defer =>
-		# On mounted, run sendEvent so that the form has our name and ref.
+		# On mounted, run sendEvent so that the form has our name, value, and validation status.
 		# We must defer so that the form component is ready to receive our event.
 		@sendEvent()
 		# Listen for events dispatched from the form component
@@ -66,7 +66,7 @@ export default
 		# Send our field information to the form component by dispatching a bubbling event
 		sendEvent: ->
 			# console.log 'sendEvent', @name, @value
-			customEvent = new CustomEvent 'vf-field-event', {bubbles: true, detail: { name: @name, ref: @$el, value: @value, valid: !@error } }
+			customEvent = new CustomEvent 'vf-field-event', {bubbles: true, detail: { name: @name, value: @value, valid: !@error } }
 			@$el.dispatchEvent customEvent
 
 		# Listen for events dispatched from the form component
