@@ -1,4 +1,11 @@
-export { default as VueForm } from './src/components/form.vue'
-export { default as InputField } from './src/components/input.vue'
-export { default as SelectField } from './src/components/select.vue'
-export { default as CheckboxField } from './src/components/checkbox.vue'
+const VueForm = require('./src/components/form.vue').default
+const InputField = require('./src/components/input.vue').default
+const SelectField = require('./src/components/select.vue').default
+const CheckboxField = require('./src/components/checkbox.vue').default
+
+export {
+  VueForm,
+  InputField,
+  SelectField,
+  CheckboxField
+}
