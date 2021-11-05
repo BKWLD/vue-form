@@ -10,7 +10,7 @@ form.vf-form(
 		:submitted='submitted'
 		:success='success'
 		:error='error'
-		:validation-error='validationError'
+		:has-validation-errors='hasValidationErrors'
 		:form='form'
 	)
 
@@ -46,7 +46,7 @@ export default
 		submitting: false
 		error: false
 		success: false
-		validationError: false
+		hasValidationErrors: false
 		allFieldsValid: false # Can't be computed prop of @valid because object keys created at runtime aren't reactive
 
 		# Field states (objects keyed by field name)
@@ -71,7 +71,7 @@ export default
 			# Sync form data to parent
 			@$emit 'update:form', @formData
 			# Check if all fields are valid
-			@validateForm()
+			@hasValidationErrors = @validateForm()
 			@$defer =>
 				# If all fields are valid, then run @submit()
 				@submit() if @allFieldsValid
