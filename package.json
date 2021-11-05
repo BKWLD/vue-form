@@ -5,5 +5,8 @@
   "main": "index.vue",
   "repository": "git@github.com:BKWLD/vue-form.git",
   "author": "Jonathan Jahr <jonjahr@gmail.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "tiny-emitter": "^2.1.0"
+  }
 }

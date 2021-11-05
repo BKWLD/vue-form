@@ -16,14 +16,14 @@ export default
 	watch:
 		# Validate this field immediately each time the field value changes.
 		value: -> 
-			console.log "watch value. validate...", @value
+			# console.log "watch value. validate...", @value
 			@validate()
 
 	methods:
 		
 		# Our main validation function
 		validate: ->
-			console.log 'validate', @name, @value
+			# console.log 'validate', @name, @value
 
 			# If no rules, return true
 			if !@rules?.length

@@ -3,6 +3,7 @@
 <template lang='pug'>
 form.vf-form(
 	v-on:submit.prevent='onSubmit'
+	:id='id'
 )
 	slot(
 		:submitting='submitting'
@@ -13,18 +14,27 @@ form.vf-form(
 		:form='form'
 	)
 
-
-
 </template>
 
 <!-- ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– -->
 
 <script lang='coffee'>
+import emitter from 'tiny-emitter/instance'
+
 export default
 	name: 'VueForm'
 
+	# Provide @id to form fields so that they can include @id with their tiny-emitter events.
+	provide: ->
+		id: @id
+
 	props:
-		# Submit callback
+		# @id must be unique from all other forms on this page.
+		# We include @id on all tiny-emitter events and use it to ignore events 
+		# emitted by other forms that might be on this page.
+		id:
+			type: String
+		# Submit callback function
 		submit:
 			type: Function
 		# Form data object.  For syncing to parent component data, if desired.
@@ -49,11 +59,12 @@ export default
 		submitted: -> @error || @success
 
 	mounted: ->
-		# Listen for child events
-		@$el.addEventListener 'vf-field-event', @onFieldEvent
+		# Subscribe to child events
+		emitter.on 'vue-form-fieldupdated', @onFieldUpdated
 
 	beforeDestroy: ->
-		@$el.removeEventListener 'vf-field-event', @onFieldEvent
+		# Unsubscribe from child events
+		emitter.off 'vue-form-fieldupdated', @onFieldUpdated
 
 	methods:
 		onSubmit: ->
@@ -65,33 +76,29 @@ export default
 				# If all fields are valid, then run @submit()
 				@submit() if @allFieldsValid
 
-		onFieldEvent: (event) ->
-			{ name, value, valid } = event.detail
-			# console.log 'fieldEvent', {name, value, valid}
-			# Save our field's value, and validation status
+		onFieldUpdated: (args) ->
+			{ id, name, value, valid } = args
+
+			# Do nothing if this event was emitted from a different form.
+			return if id != @id
+
+			# console.log 'fieldEvent', {id, name, value, valid}
+			
+			# Save our field's latest value
 			@formData[name] = value
 			@valid[name] = valid
+			
 			# Sync our form data to the parent Vue component
 			@$emit 'update:form', @formData
 
 		validateForm: ->
-			# Loop through fields and trigger each field to validate itself
-			fieldElements = @$el.querySelectorAll('.vf-field')
-			
-			fieldElements.forEach (fieldElement) => @sendEvent fieldElement, 'validate'
-			# Wait a tick for subcomponents to send us results, then check if all fields are valid
+			emitter.emit 'vue-form-validatefields', { id: @id }
+
+			# Wait a tick for subcomponents to send us results
 			@$defer =>
+				# If all fields are valid return true
 				@allFieldsValid = Object.values(@valid).every (val) -> return val
 				return @allFieldsValid
-
-		# Send custom event to a form field
-		sendEvent: (fieldElement, type) ->
-			# console.log 'sendEvent', @name, type
-			customEvent = new CustomEvent 'vf-form-event', {bubbles: false, detail: { type: type } }
-			
-			fieldElement.dispatchEvent customEvent
-
-
 
 </script>
 

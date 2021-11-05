@@ -1,3 +1,5 @@
+import emitter from 'tiny-emitter/instance'
+
 # Common logic for all fields
 export default
 	props:
@@ -16,7 +18,6 @@ export default
 			type: Boolean
 			default: false
 
-
 		# Shows a "?" button inside the input which toggles a tooltip message.
 		tooltip:
 			type: String
@@ -27,6 +28,9 @@ export default
 		# Tooltip state
 		tooltipActive: false
 
+	# Inject @id from form-field
+	inject: ['id']
+
 	computed:
 		commonClasses: -> [
 			'error': !!@error
@@ -34,17 +38,16 @@ export default
 			'has-tooltip' if @tooltip
 		]
 
-	# watch:
-	# 	value: -> @$emit 'input', @value
-
 	mounted: -> @$defer =>
 		# On mounted, run sendEvent so that the form has our name, value, and validation status.
 		# We must defer so that the form component is ready to receive our event.
 		@sendEvent()
-		# Listen for events dispatched from the form component
-		@$el.addEventListener 'vf-form-event', @onFormEvent
+		# Listen for events emitted by the form component
+		emitter.on 'vue-form-validatefields', @onValidateFields
 
-	beforeDestroy: -> @$el.removeEventListener 'vf-form-event', @onFormEvent
+	beforeDestroy: ->
+		# Unsubscribe from child events
+		emitter.off 'vue-form-validatefields', @onValidateFields
 
 	methods:
 		tooltipClick: (event) ->
@@ -60,22 +63,23 @@ export default
 			return if @$el.contains document.activeElement
 			# If keyboard focus has left this component, then close the tooltip and validate the input.
 			@tooltipActive = false
-			console.log 'focusOut. validate...', @name, document.activeElement
 			@validate()
 
-		# Send our field information to the form component by dispatching a bubbling event
+		# Send our field information to the form component using tiny-emitter
 		sendEvent: ->
 			# console.log 'sendEvent', @name, @value
-			customEvent = new CustomEvent 'vf-field-event', {bubbles: true, detail: { name: @name, value: @value, valid: !@error } }
-			@$el.dispatchEvent customEvent
+			emitter.emit 'vue-form-fieldupdated', { id: @id, name: @name, value: @value, valid: !@error }
 
-		# Listen for events dispatched from the form component
-		onFormEvent: (event) ->
-			{ type } = event.detail
+		# Listen for events emitted from the form component
+		onValidateFields: (args) ->
+			{ id } = args
+
+			# Do nothing if this event was emitted from a different form.
+			return if id != @id
+
 			# console.log 'formEvent', {type}
 			# Form component has asked us to validate our input
-			if type=='validate'
-				# Clear the error, wait a tick, then validate.
-				# This is a hacky way to force the error messages to re-animate and get the user's attention.
-				@error = ''
-				@$nextTick => @validate()
+			# Clear the error, wait a tick, then validate.
+			# This is a hacky way to force the error messages to re-animate and get the user's attention.
+			@error = ''
+			@$nextTick => @validate()
