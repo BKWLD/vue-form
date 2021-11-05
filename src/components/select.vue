@@ -22,7 +22,7 @@
 				:value='option.value'
 			) {{ option.label }}
 
-		form-vf-tooltip-button(v-if='tooltip' :tooltipActive='tooltipActive' @click.native='tooltipClick')
+		tooltip-btn(v-if='tooltip' :tooltipActive='tooltipActive' @click.native='tooltipClick')
 
 		//- Down arrow icon
 		svg.icon(height="16" viewBox="0 0 16 16" width="16" xmlns="http://www.w3.org/2000/svg"): path(d="m16 5.5-2-2-6 6-6-6-2 2 8 8z")
@@ -40,10 +40,15 @@
 <script lang='coffee'>
 import isField from '../concerns/is-field'
 import hasValidation from '../concerns/has-validation'
+import TooltipBtn from './tooltip-btn.vue'
 
 export default
 
 	mixins: [ isField, hasValidation ]
+
+	components: {
+		TooltipBtn
+	}
 
 	props:
 		options:

@@ -21,7 +21,7 @@
 			v-model='value'
 		)
 
-		form-vf-tooltip-button(v-if='tooltip' :tooltipActive='tooltipActive' @click.native='tooltipClick')
+		tooltip-btn(v-if='tooltip' :tooltipActive='tooltipActive' @click.native='tooltipClick')
 
 	//- Error message
 	transition(name='vf-slide'): .vf-error-message(v-if='error && !tooltipActive') {{ error }}
@@ -34,11 +34,16 @@
 <script lang='coffee'>
 import isField from '../concerns/is-field'
 import hasValidation from '../concerns/has-validation'
+import TooltipBtn from './tooltip-btn.vue'
 
 export default
 	name: 'InputField'
 
 	mixins: [ isField, hasValidation ]
+
+	components: {
+		TooltipBtn
+	}
 
 	props:
 
