@@ -12,23 +12,7 @@ Add this to `nuxt.config.coffee`, so that vue-form's components are registered g
 buildModules: ['@nuxt/components', 'vue-form/nuxt']
 ```
 
-In your Vue component, add your submit handler:
-
-```coffee
-export default
-  methods:
-    # Submit handler is executed on submit, but only if all input has passed client-side validation.
-    onSubmit: (form) -> 
-      # `form` argument is an object with all your form field data
-      
-      # Submit handler can be async
-      await @uploadToSomewhere(form)
-      
-      # If submit handler throws an error, vue-form catches it and sets @error and @submitted to true, and logs the error to console as a console.warn
-      throw("Couldn't connect to remote service")
-```
-
-Build your form.  Use any DOM structure as long as the field components are a descendant of `vue-form`.  For example:
+Build your form:
 ```pug
 vue-form(
   id='newsletter'
@@ -42,7 +26,9 @@ vue-form(
   .message(v-else) Sign up
 
   //- Form Fields
-  .fields(v-if='!submitted)
+  //- Use any DOM structure as long as the fields
+  //- are a descendant of vue-form.
+  .fields(v-if='!submitted')
 
     input-field(
       label="Your Name"
@@ -56,11 +42,27 @@ vue-form(
       placeholder="Your email address"
       :rules='["email"]'
     )
-
+    
     button(
       type='submit'
     ) Sign up
 ```
+
+Add your submit handler:
+
+```coffee
+methods:
+  onSubmit: (form) -> 
+    # Executed only if all input has passed client-side validation.
+    # `form` is an object with all your field data
+    
+    # Can be async
+    await @uploadToSomewhere(form)
+    
+    # vue-form catches errors, sets @error and @submitted to true, and logs the error to console as a console.warn
+    throw("Couldn't connect to remote service")
+```
+
 
 ## Custom Styling
 
@@ -73,7 +75,7 @@ To skin vue-form, you have two options:
 To import vue-form's Stylus stylesheet and create a theme:
 
 ```stylus
->>>  // 👈 Deep selector is required if styles are scoped
+>>>  // 👈 Deep selector is required if your component styles are scoped
   // Customize variables (see "vue-form/src/assets/definitions.styl")
   form-color-base = white
   form-bkg-base = grey
