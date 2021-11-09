@@ -34,7 +34,7 @@
 <script lang='coffee'>
 import isField from '../concerns/is-field'
 import hasValidation from '../concerns/has-validation'
-import TooltipBtn from './tooltip-btn.vue'
+import TooltipBtn from '../components-private/tooltip-btn.vue'
 
 export default
 	name: 'InputField'
@@ -86,77 +86,4 @@ export default
 <!-- ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– -->
 
 <style lang='stylus'>
-// Not scoped so it's easier to override
-
-@import '../assets/field-styles.styl'
-
-.vf-inputfield
-	width 100%
-	color form-color-base
-
-	label
-		display block
-		position relative
-		margin-bottom form-input-label-above-padding
-
-	.input-wrap
-		position relative
-
-	input
-		// Fill container
-		width 100%
-
-		// Give it a fluid height
-		fluid height, form-input-height, form-input-height-min
-
-		// Push text away from margins
-		fluid padding-h, form-input-padding-h, form-input-padding-h-min
-
-		// Outline
-		outline form-outline-width solid form-outline-base
-		border none
-		border-radius form-input-radius
-
-		// Animation
-		transition color form-base-speed
-
-		&:not([disabled])
-			// Hover state
-			+hover()
-				outline-color form-outline-hover
-				color form-color-hover
-				background form-bkg-hover
-
-			// Focus state
-			&:focus
-				transition-duration (form-base-speed/2)
-				outline-color form-outline-focus
-				color form-color-focus
-				background form-bkg-focus
-				outline-offset form-outline-offset
-
-		// Error state
-		&.error
-			outline-color form-outline-error
-			color form-color-error
-			background form-bkg-error
-
-		// Disabled state
-		&[disabled]
-			&, &::placeholder
-				color grey
-				opacity 1
-
-		&::-webkit-outer-spin-button,
-		&::-webkit-inner-spin-button
-			-webkit-appearance none
-			margin 0
-
-		[type=number]
-			-moz-appearance textfield
-
-	// transparent placeholder on focus
-	input:focus::placeholder
-		color transparent
-
 </style>

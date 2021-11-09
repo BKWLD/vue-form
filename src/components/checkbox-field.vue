@@ -37,7 +37,7 @@
 <script lang='coffee'>
 import isField from '../concerns/is-field'
 import hasValidation from '../concerns/has-validation'
-import TooltipBtn from './tooltip-btn.vue'
+import TooltipBtn from '../components-private/tooltip-btn.vue'
 
 export default
 	mixins: [ isField, hasValidation ]
@@ -68,80 +68,5 @@ export default
 <!-- ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– -->
 
 <style lang='stylus'>
-@import '../assets/field-styles.styl'
-
-.vf-checkbox
-	color form-color-base
-
-	.checkbox-wrap
-		display flex
-		align-items flex-start
-		cursor pointer
-
-	.checkbox-bkg
-		display block
-		flex-shrink 0
-		width form-checkbox-size
-		height form-checkbox-size
-		position relative
-		fluid margin-right, form-input-padding-h, form-input-padding-h-min
-		outline 1px solid form-outline-base
-
-	.checkbox-icon
-		display block
-		position absolute
-		width 100%
-		height 100%
-		left 6px
-		top 3px
-		opacity 0
-		transition transform form-base-speed form-easing-function, opacity (form-base-speed/1.25)
-		transform-origin 20% 80%
-		transform scale(0.3, 0.3)
-
-	svg path
-		fill form-color-base
-
-	input[type=checkbox]
-		// Must not be display:none in order to be tabbable
-		opacity 0
-		width 0
-
-	.label
-		padding-top 5px // Vertically center the first line of text with the checkbox
-		position relative
-
-		.vf-checkbox&
-			padding-right (form-tooltip-btn-w + form-input-padding-h)
-
-	// Checked state
-	input:checked ~ .checkbox-bkg .checkbox-icon
-		opacity 1
-		transform scale(1, 1)
-
-	// Focus state
-	input.focus-visible ~ .checkbox-bkg
-		outline-color form-outline-focus
-		background form-bkg-hover
-
-	// Hover state
-	.checkbox:hover
-		.checkbox-bkg
-			background form-bkg-hover
-			outline-color form-outline-hover
-
-	// Error state
-	&.error
-		.checkbox-bkg
-			background form-bkg-error
-			outline-color form-outline-error
-
-	// Error message
-	.error-message
-		padding-top 10px
-
-	// Tooltip
-	.vf-tooltip-btn
-		right 0px
 
 </style>

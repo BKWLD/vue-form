@@ -7,26 +7,15 @@
 
 ## Getting Started
 
-In your project's `nuxt.config.js`, add the transpile option:
+In your project's `nuxt.config.js`, register your form components:
 ```
-build: {
-  transpile: ['vue-form']
-}
+	buildModules: ['@nuxt/components', 'vue-form/nuxt']
 ```
+Now vue-form's components are registered globally in Nuxt.
 
-Skin your form.  In your project's `definitions.styl`, override the default Stylus variables in `vue-forms/src/assets/definitions.styl`.
-
-In your Vue component, import the form components and add your submit handler:
+In your Vue component, add your submit handler:
 ```
-import { VueForm, InputField, SelectField, CheckboxField } from 'vue-form'
-
 export default
-	components: {
-		VueForm
-		InputField
-		SelectField
-		CheckboxField
-	}
   methods:
     # Called on submit if input passed validation
     onSubmit: -> alert('Submit!')
@@ -75,6 +64,28 @@ vue-form(
       type='submit
       :disabled='submitting'
     ) Sign up
+```
+
+### Custom Styles
+
+To skin Vue Form, you have two options:
+
+* Import the Stylus stylesheet into your component, and override the default Stylus variables.
+
+* Don't import the Stylus, and write your own CSS.
+
+To use the Stylus stylesheet:
+
+```
+<style lang='stylus' scoped>
+// Deep selector is required if styles are scoped
+>>>
+  // Customize your variables (any variable in "vue-form/src/assets/definitions.styl")
+	form-color-base = white
+	form-bkg-base = yellow
+	
+	// Then import vue-form styles
+	@import '~vue-form/index.styl'
 ```
 
 ## Validation
