@@ -118,24 +118,28 @@ If you provide a custom validator function, it must:
 
 ### Why does this package use an event bus?
 
-Most Vue form libraries manage field values with a direct data binding, often using `v-model`.  The resulting form looks like this:
+Most Vue form libraries manage field values with a direct data binding, often using `v-model`.  The result is that each field name is repeated up to four times.  Forgetting or misspelling any of these causes problems:
 
 ```
 <template>
 form( :rules='rules' )
   input-field(
-    v-model="form.email"
+    v-model="form.email" // 👈 Field name
     label="Email Address"
-    name="email" // 👈 Field name is repeated twice (in the "name" and "v-model" props)
+    name="email" // 👈 Field name (2nd time, needed for label's `for` attribute)
   )
   ...
 </template>
 
 export default
   data: ->
-    rules: // 👈 Validation rules are down here, versus in each field
-      email: ['required', 'email']  // 👈 Field name is repeated a third time if it has validation rules.
-    form: {} // 👈 Form data is out here
+    form: {
+      name: "" // 👈 Field name (3rd time, needed so that the `form` object is reactive)
+    } 
+
+    rules: {
+      email: ['required', 'email']  // 👈 Field name (4th time, needed if the field has validation rules)
+    }
 ```
 
-In this form library, the form component and the fields communicate directly using an event bus (`tiny-emitter` library).  This does introduce complexity, as it's essentially a manual data binding outside of Vue.
+In this form library, the form component and the fields communicate directly using an event bus (`tiny-emitter` library).  This introduces complexity (it's essentially a manual data binding outside of Vue), but it eliminates the 4x `name` repetition, and it lets us make `rules` a prop on each field, which is a nice API.
