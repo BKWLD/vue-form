@@ -8,17 +8,15 @@
 ## Getting Started
 
 Add this to `nuxt.config.coffee`, so that vue-form's components are registered globally in Nuxt:
-```
-# nuxt.config.coffee
+```coffee
 buildModules: ['@nuxt/components', 'vue-form/nuxt']
 ```
 
 In your Vue component, add your submit handler:
 
-```
+```coffee
 export default
   methods:
-    
     # Submit handler is executed on submit, but only if all input has passed client-side validation.
     onSubmit: (form) -> 
       # `form` argument is an object with all your form field data
@@ -31,7 +29,7 @@ export default
 ```
 
 Build your form.  Use any DOM structure as long as the field components are a descendant of `vue-form`.  For example:
-```
+```pug
 vue-form(
   id='newsletter'
   :submit='onSubmit'
@@ -74,12 +72,11 @@ To skin vue-form, you have two options:
 
 To import vue-form's Stylus stylesheet and create a theme:
 
-```
-<style lang='stylus' scoped>
+```stylus
 >>>  // 👈 Deep selector is required if styles are scoped
   // Customize variables (see "vue-form/src/assets/definitions.styl")
   form-color-base = white
-  form-bkg-base = yellow
+  form-bkg-base = grey
   
   // Import vue-form styles
   @import '~vue-form/index.styl'
@@ -109,7 +106,7 @@ Functions are your custom validator functions.  A validator function must:
 
 ### Why does this package use an event bus?
 
-Most Vue form libraries manage field values with a direct data binding, often using v-model.  The result is that each field's `name` is repeated up to four times:
+Most Vue form libraries manage field values with a direct data binding.  The result is that each field's `name` is repeated up to four times:
 
 ```
 <template>
@@ -121,7 +118,6 @@ vue-form(:form='form' :rules='rules')
   )
   ...
 </template>
-
 export default
   data: ->
     form: {
@@ -135,4 +131,4 @@ export default
 
 Forgetting or misspelling any of these four `name` instances will break something important.  In a big form, this can be a lot to manage.
 
-In this form library, the form component and the fields communicate directly using an event bus (`tiny-emitter` library, so it's Vue 3 compatible).  This is a tradeoff: it introduces complexity (it's a manual data binding outside of Vue), but it allows us to eliminate this 4x `name` repetition.  Plus, it lets us make `rules` a prop on each field, which is a nicer API.
+In this form library, the form component and the fields communicate directly using an event bus (`tiny-emitter` library, so it's Vue 3 compatible).  This is a tradeoff: it introduces complexity (it's a manual data binding outside of Vue), but it allows us to eliminate this 4x `name` repetition.  It also lets us make `rules` a prop on each field which is a nice API.
