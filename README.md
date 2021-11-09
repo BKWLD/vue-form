@@ -1,17 +1,17 @@
 
 ## Caveats
 
-- This package is designed to be used by a Cloak app.  
-- Requires being imported and transpiled by Nuxt
-- Expects `bukwild-stylus-library` mixins to already be imported into Stylus
+- This package is designed to be used by a Cloak app.
+- Included styles are written in Stylus only
+- Stylus expects `bukwild-stylus-library` mixins to already be imported
 
 ## Getting Started
 
-In your project's `nuxt.config.js`, register your form components:
+Add this to `nuxt.config.coffee`, so that vue-form's components are registered globally in Nuxt:
 ```
-	buildModules: ['@nuxt/components', 'vue-form/nuxt']
+# nuxt.config.coffee
+buildModules: ['@nuxt/components', 'vue-form/nuxt']
 ```
-Now vue-form's components are registered globally in Nuxt.
 
 In your Vue component, add your submit handler:
 ```
@@ -21,7 +21,7 @@ export default
     onSubmit: -> alert('Submit!')
 ```
 
-Add the form:
+Add your form to your template.  For example:
 ```
 vue-form(
   id='newsletter'
@@ -66,33 +66,34 @@ vue-form(
     ) Sign up
 ```
 
-### Custom Styles
+## Custom Styling
 
-To skin Vue Form, you have two options:
+To skin vue-form, you have two options:
 
-* Import the Stylus stylesheet into your component, and override the default Stylus variables.
+* Import vue-form's Stylus stylesheet into your component, and quickly customize a theme by overriding the default Stylus variables.
 
-* Don't import the Stylus, and write your own CSS.
+* Don't import the Stylus, and write your own CSS.  Vue-form's components include no styles by default.  This is by design, to give you the most flexibility.
 
-To use the Stylus stylesheet:
+To import vue-form's Stylus stylesheet and customize a theme:
 
 ```
 <style lang='stylus' scoped>
 // Deep selector is required if styles are scoped
 >>>
   // Customize your variables (any variable in "vue-form/src/assets/definitions.styl")
-	form-color-base = white
-	form-bkg-base = yellow
-	
-	// Then import vue-form styles
-	@import '~vue-form/index.styl'
+  form-color-base = white
+  form-bkg-base = yellow
+  
+  // Then import vue-form styles
+  @import '~vue-form/index.styl'
 ```
 
 ## Validation
 
 Fields have a `rules` prop that accepts an array of strings or functions.  Strings represent preset validators included in this package.  Functions are your custom validator functions.
 
-Preset validators:
+Vue-form includes the following presets:
+
 - "email":  Must be a valid email
 - "required": Must not be empty or unchecked.
 - "url": Must be a valid URL.
@@ -100,7 +101,7 @@ Preset validators:
 - "ipAddress":  Must be a valid IPv4 or IPv6 address.
 - "notIpAddress"
 
-Custom validator functions should:
+If you provide a custom validator function, it must:
 - Accept one argument (the field input)
 - Return either true (valid), false (invalid), or a string (invalid, with a custom validation error message)
 
