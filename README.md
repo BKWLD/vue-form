@@ -19,15 +19,15 @@ In your Vue component, add your submit handler:
 export default
   methods:
     
-		# Submit handler is executed on submit, but only if all input has passed client-side validation.
+    # Submit handler is executed on submit, but only if all input has passed client-side validation.
     onSubmit: (form) -> 
-			# `form` argument is an object with all your form field data
-			
-			# Submit handler can be async
-			await @uploadToSomewhere(form)
-			
-			# If submit handler throws an error, vue-form catches it and sets @error and @submitted to true, and logs the error to console as a console.warn
-			throw("Couldn't connect to remote service")
+      # `form` argument is an object with all your form field data
+      
+      # Submit handler can be async
+      await @uploadToSomewhere(form)
+      
+      # If submit handler throws an error, vue-form catches it and sets @error and @submitted to true, and logs the error to console as a console.warn
+      throw("Couldn't connect to remote service")
 ```
 
 Add your form to your template.  For example:
@@ -116,23 +116,26 @@ If you provide a custom validator function, it must:
 
 ## FAQ
 
-### Why use the event bus pattern?
+### Why does this package use an event bus?
 
-The form library be implemented a more traditional way without an event bus:
+Most Vue form libraries manage field values with a direct data binding, often using `v-model`.  The resulting form looks like this:
 
-- Manage field values using `v-model`.
-- Put validation logic in the form, rather than in the fields.
+```
+<template>
+form( :rules='rules' )
+  input-field(
+    v-model="form.email"
+    label="Email Address"
+    name="email" // 👈 Field name is repeated twice (in the "name" and "v-model" props)
+  )
+  ...
+</template>
 
-However using an event bus has some advantages:
+export default
+  data: ->
+    rules: // 👈 Validation rules are down here, versus in each field
+      email: ['required', 'email']  // 👈 Field name is repeated a third time if it has validation rules.
+		form: {} // 👈 Form data is out here
+```
 
-- The validation rules have a nicer API: we can add a `rules` prop to each field right in the template, rather than as a big `rules` object in the component data.
-- By using an event bus, we can eliminate some props on the field components, reducing template repetition.
-
-### Why doesn't this package ship pre-compiled?
-
-This package ships uncompiled (and needs to be transpiled by Nuxt) so that its Stylus can be compiled by your Nuxt app.  This allows you to override the default Stylus variables in in `vue-form/src/assets/definitions.styl`, which allows you to skin the form elements much more easily.  If this package shipped pre-compiled, you'd have to import the compiled default CSS and then override it, forcing you to write more CSS and ship more redundant CSS.
-
-
-
-
-
+In this form library, the form component and the fields communicate directly using an event bus (`tiny-emitter` library).  This does introduce complexity, as it's essentially a manual data binding outside of Vue.
