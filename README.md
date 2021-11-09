@@ -30,48 +30,37 @@ export default
       throw("Couldn't connect to remote service")
 ```
 
-Add your form to your template.  For example:
+Build your form.  Use any DOM structure as long as the field components are a descendant of `vue-form`.  For example:
 ```
 vue-form(
   id='newsletter'
   :submit='onSubmit'
   #default="{success, error, hasValidationErrors, submitting, submitted}"
 )
-  //- Build your form with any DOM structure, as long as
-  //- the field components are a descendant of `vue-form`.
   
   //- Form message
-  .message(v-if='success') Thanks for signing up!
+  .message(v-if='success') Thanks!
   .message(v-else-if='error') Error.
-  .message(v-else) Sign up for our newsletter!
+  .message(v-else) Sign up
 
-  //- Form Fields (hide after submitted)
+  //- Form Fields
   .fields(v-if='!submitted)
 
-    .validation-error(v-if='hasValidationErrors') Please fix the following error(s):
-
     input-field(
-      label="Name"
+      label="Your Name"
       name="name"
       :rules='["required"]'
     )
 
     input-field(
-      label="Email"
+      label="Email Address"
       name="email"
       placeholder="Your email address"
       :rules='["email"]'
     )
 
-    checkbox-field.consent(
-      name="consent"
-      label="Please send me emails"
-      :rules='["required"]'
-    )
-
     button(
-      type='submit
-      :disabled='submitting'
+      type='submit'
     ) Sign up
 ```
 
@@ -79,29 +68,30 @@ vue-form(
 
 To skin vue-form, you have two options:
 
-* Import vue-form's Stylus stylesheet into your component, and quickly customize a theme by overriding the default Stylus variables.
+* Import vue-form's Stylus stylesheet into your component, and create a theme by overriding a few Stylus variables.
 
-* Don't import the Stylus, and write your own CSS.  Vue-form's components include no styles by default.  This is by design, to give you the most flexibility.
+* Start from scratch.  Vue-form's components include no styles by default.  This is by design, to give you the most flexibility.
 
-To import vue-form's Stylus stylesheet and customize a theme:
+To import vue-form's Stylus stylesheet and create a theme:
 
 ```
 <style lang='stylus' scoped>
-// Deep selector is required if styles are scoped
->>>
-  // Customize your variables (any variable in "vue-form/src/assets/definitions.styl")
+>>>  // 👈 Deep selector is required if styles are scoped
+  // Customize variables (see "vue-form/src/assets/definitions.styl")
   form-color-base = white
   form-bkg-base = yellow
   
-  // Then import vue-form styles
+  // Import vue-form styles
   @import '~vue-form/index.styl'
 ```
 
 ## Validation
 
-Fields have a `rules` prop that accepts an array of strings or functions.  Strings represent preset validators included in this package.  Functions are your custom validator functions.
+Each field validates itself on blur and submit, and shows/hides its own validation message.
 
-Vue-form includes the following presets:
+Fields have a `rules` prop that accepts an array of strings or functions.  
+
+Strings represent preset validators included in this package:
 
 - "email":  Must be a valid email
 - "required": Must not be empty or unchecked.
@@ -110,9 +100,10 @@ Vue-form includes the following presets:
 - "ipAddress":  Must be a valid IPv4 or IPv6 address.
 - "notIpAddress"
 
-If you provide a custom validator function, it must:
-- Accept one argument (the field input)
-- Return either true (valid), false (invalid), or a string (invalid, with a custom validation error message)
+Functions are your custom validator functions.  A validator function must:
+
+- Accept one argument (the field value)
+- Return true (valid), false (invalid), or a string (invalid, with a custom validation error message)
 
 ## FAQ
 
@@ -122,7 +113,7 @@ Most Vue form libraries manage field values with a direct data binding, often us
 
 ```
 <template>
-form(:form='form' :rules='rules')
+vue-form(:form='form' :rules='rules')
   input-field(
     v-model="form.email" // 👈 Field name (1st time)
     label="Email Address"
@@ -144,4 +135,4 @@ export default
 
 Forgetting or misspelling any of these four `name` instances will break something important.  In a big form, this can be a lot to manage.
 
-In this form library, the form component and the fields communicate directly using an event bus (`tiny-emitter` library, so it's Vue 3 compatible).  This introduces complexity (it's a manual data binding outside of Vue), but it allows us to eliminate the 4x `name` repetition, and it lets us make `rules` a prop on each field, which is a nice API.
+In this form library, the form component and the fields communicate directly using an event bus (`tiny-emitter` library, so it's Vue 3 compatible).  This is a tradeoff: it introduces complexity (it's a manual data binding outside of Vue), but it allows us to eliminate this 4x `name` repetition.  Plus, it lets us make `rules` a prop on each field, which is a nicer API.
