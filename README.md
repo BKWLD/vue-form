@@ -118,7 +118,7 @@ If you provide a custom validator function, it must:
 
 ### Why does this package use an event bus?
 
-Most Vue form libraries manage field values with a direct data binding, often using `v-model`.  The result is that each field name is repeated up to four times.
+Most Vue form libraries manage field values with a direct data binding, often using v-model.  The result is that each field's `name` is repeated up to four times:
 
 ```
 <template>
@@ -142,6 +142,6 @@ export default
     }
 ```
 
-Forgetting or misspelling any of these four `name` instances will break something important.  In a big form this can become a lot to manage.
+Forgetting or misspelling any of these four `name` instances will break something important.  In a big form, this can be a lot to manage.
 
 In this form library, the form component and the fields communicate directly using an event bus (`tiny-emitter` library, so it's Vue 3 compatible).  This introduces complexity (it's a manual data binding outside of Vue), but it allows us to eliminate the 4x `name` repetition, and it lets us make `rules` a prop on each field, which is a nice API.
