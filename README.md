@@ -118,15 +118,15 @@ If you provide a custom validator function, it must:
 
 ### Why does this package use an event bus?
 
-Most Vue form libraries manage field values with a direct data binding, often using `v-model`.  The result is that each field name is repeated up to four times.  Forgetting or misspelling any of these causes problems:
+Most Vue form libraries manage field values with a direct data binding, often using `v-model`.  The result is that each field name is repeated up to four times.
 
 ```
 <template>
-form( :rules='rules' )
+form(:form='form' :rules='rules')
   input-field(
-    v-model="form.email" // 👈 Field name
+    v-model="form.email" // 👈 Field name (1st time)
     label="Email Address"
-    name="email" // 👈 Field name (2nd time, needed for label's `for` attribute)
+    name="email" // 👈 Field name (2nd time, for the input label's `for` attribute)
   )
   ...
 </template>
@@ -134,12 +134,14 @@ form( :rules='rules' )
 export default
   data: ->
     form: {
-      name: "" // 👈 Field name (3rd time, needed so that the `form` object is reactive)
+      name: "" // 👈 Field name (3rd time, or else this property is not reactive)
     } 
 
     rules: {
-      email: ['required', 'email']  // 👈 Field name (4th time, needed if the field has validation rules)
+      email: ['required', 'email']  // 👈 Field name (4th time, if we want validation rules)
     }
 ```
 
-In this form library, the form component and the fields communicate directly using an event bus (`tiny-emitter` library).  This introduces complexity (it's essentially a manual data binding outside of Vue), but it eliminates the 4x `name` repetition, and it lets us make `rules` a prop on each field, which is a nice API.
+Forgetting or misspelling any of these four `name` instances will break something important.  In a big form this can become a lot to manage.
+
+In this form library, the form component and the fields communicate directly using an event bus (`tiny-emitter` library, so it's Vue 3 compatible).  This introduces complexity (it's a manual data binding outside of Vue), but it allows us to eliminate the 4x `name` repetition, and it lets us make `rules` a prop on each field, which is a nice API.
