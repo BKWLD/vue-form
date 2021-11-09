@@ -12,6 +12,7 @@ form.vf-form(
 		:error='error'
 		:has-validation-errors='hasValidationErrors'
 		:form='form'
+		:resetForm='resetForm'
 	)
 
 </template>
@@ -72,9 +73,17 @@ export default
 			@$emit 'update:form', @formData
 			# Check if all fields are valid
 			@hasValidationErrors = @validateForm()
+			# Wait for the field components to send us results
 			@$defer =>
-				# If all fields are valid, then run @submit()
-				@submit() if @allFieldsValid
+				return unless @allFieldsValid
+				try 
+					@submitting = true
+					await @submit(@formData)
+					@success = true
+				catch errorArg
+					@error = true
+					console.warn('vue-form: Submit callback threw error:')
+					console.warn(errorArg)
 
 		onFieldUpdated: (args) ->
 			{ id, name, value, valid } = args
@@ -94,11 +103,17 @@ export default
 		validateForm: ->
 			emitter.emit 'vue-form-validatefields', { id: @id }
 
-			# Wait a tick for subcomponents to send us results
+			# Wait for the field components to send us results
 			@$defer =>
 				# If all fields are valid return true
 				@allFieldsValid = Object.values(@valid).every (val) -> return val
 				return @allFieldsValid
+
+		resetForm: (event) ->
+			event.preventDefault()
+			@submitting = false
+			@error = false
+			@success = false
 
 </script>
 

@@ -14,11 +14,20 @@ buildModules: ['@nuxt/components', 'vue-form/nuxt']
 ```
 
 In your Vue component, add your submit handler:
+
 ```
 export default
   methods:
-    # Called on submit if input passed validation
-    onSubmit: -> alert('Submit!')
+    
+		# Submit handler is executed on submit, but only if all input has passed client-side validation.
+    onSubmit: (form) -> 
+			# `form` argument is an object with all your form field data
+			
+			# Submit handler can be async
+			await @uploadToSomewhere(form)
+			
+			# If submit handler throws an error, vue-form catches it and sets @error and @submitted to true, and logs the error to console as a console.warn
+			throw("Couldn't connect to remote service")
 ```
 
 Add your form to your template.  For example:
