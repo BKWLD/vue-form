@@ -135,7 +135,7 @@ export default
   data: ->
     rules: // 👈 Validation rules are down here, versus in each field
       email: ['required', 'email']  // 👈 Field name is repeated a third time if it has validation rules.
-		form: {} // 👈 Form data is out here
+    form: {} // 👈 Form data is out here
 ```
 
 In this form library, the form component and the fields communicate directly using an event bus (`tiny-emitter` library).  This does introduce complexity, as it's essentially a manual data binding outside of Vue.
