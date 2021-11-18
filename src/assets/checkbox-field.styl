@@ -11,9 +11,11 @@
 		flex-shrink 0
 		width form-checkbox-size
 		height form-checkbox-size
+		border-radius form-checkbox-radius
 		position relative
 		fluid margin-right, form-input-padding-h, form-input-padding-h-min
 		outline form-outline-width solid form-outline-base
+		outline-offset form-outline-offset
 		background form-bkg-base
 
 	.checkbox-icon
@@ -27,9 +29,8 @@
 		transition transform form-base-speed form-easing-function, opacity (form-base-speed/1.25)
 		transform-origin 20% 80%
 		transform scale(0.3, 0.3)
-
-	svg path
-		fill form-label-base
+		svg path
+			fill form-color-base
 
 	input[type=checkbox]
 		// Must not be display:none in order to be tabbable
@@ -59,10 +60,21 @@
 			background form-bkg-hover
 			outline-color form-outline-hover
 
+		.checkbox-icon svg path
+			fill form-color-hover
+
 	// Error state
 	&.error
 		.checkbox-bkg
 			background form-bkg-error
+			outline-color form-outline-error
+
+		.checkbox-icon svg path
+			fill form-color-error-hover
+
+		// Error hover state
+		.checkbox-wrap:hover .checkbox-bkg
+			background form-bkg-error-hover
 			outline-color form-outline-error
 
 	// Error message

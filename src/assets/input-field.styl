@@ -54,8 +54,9 @@
 		// Error state
 		&.error
 			outline-color form-outline-error
-			color form-color-error
 			background form-bkg-error
+			&, &::placeholder
+				color form-color-error
 
 			+hover()
 				color form-color-error-hover
