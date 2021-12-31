@@ -21,9 +21,10 @@ export default
 		# Shows a "?" button inside the input which toggles a tooltip message.
 		tooltip:
 			type: String
-
+		
 	data: ->
-		value: ''
+		# Set initial value to @default prop if provided.
+		value: @default || ''
 		
 		# Tooltip state
 		tooltipActive: false

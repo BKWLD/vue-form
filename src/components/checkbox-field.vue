@@ -46,6 +46,7 @@ export default
 	props:
 		name: String
 		label: String
+		default: Boolean
 
 	components: {
 		TooltipBtn
