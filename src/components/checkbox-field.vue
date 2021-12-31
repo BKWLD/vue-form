@@ -14,6 +14,7 @@
 			:name='name'
 			:id='name'
 			v-model='value'
+			@click='onClick'
 		)
 		//- Visual checkbox
 		.checkbox-bkg

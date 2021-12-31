@@ -1,7 +1,7 @@
 <!--  -->
 
 <template lang='pug'>
-.vf-field.vf-select(@focusout='focusOut')
+.vf-field.vf-select(@focusout='focusOut' @click='onClick')
 	label.vf-label-above(:for='name') {{ label }}
 	.select
 		select(

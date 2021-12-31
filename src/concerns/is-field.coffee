@@ -83,3 +83,7 @@ export default
 			# This is a hacky way to force the error messages to re-animate and get the user's attention.
 			@error = ''
 			@$nextTick => @validate()
+
+		# Pass through @click listener
+		onClick: (event) ->
+			@$listeners?.click?()
