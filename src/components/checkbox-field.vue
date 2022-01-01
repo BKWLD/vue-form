@@ -13,7 +13,8 @@
 			type='checkbox'
 			:name='name'
 			:id='name'
-			v-model='value'
+			:checked='computedValue'
+			@change='onChange'
 			@click='onClick'
 		)
 		//- Visual checkbox
@@ -47,6 +48,9 @@ export default
 		name: String
 		label: String
 		default: Boolean
+		# If provided, the field will show the prop value, and the value
+		# should be managed externally.
+		readOnlyValue: Boolean
 
 	components: {
 		TooltipBtn
@@ -60,6 +64,13 @@ export default
 			'inverted' if @inverted
 			...@commonClasses
 		]
+
+		# If readOnlyValue provided, then always show that value.
+		computedValue: -> if @readOnlyValue? then @readOnlyValue else @value
+
+	methods:
+		# Manually do v-bind (set @value on the @changed event)
+		onChange: (event) -> @value = event.target.checked
 
 	watch:
 		value: -> @state = @value

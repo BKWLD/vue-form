@@ -24,7 +24,7 @@ export default
 		
 	data: ->
 		# Set initial value to @default prop if provided.
-		value: @default || ''
+		value: ''
 		
 		# Tooltip state
 		tooltipActive: false
