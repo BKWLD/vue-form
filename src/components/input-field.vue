@@ -23,6 +23,9 @@
 
 		tooltip-btn(v-if='tooltip' :tooltipActive='tooltipActive' @click.native='tooltipClick')
 
+		//- Default slot.  Lets you render extra buttons etc inside .input-wrap
+		slot
+
 	//- Error message
 	transition(name='vf-slide'): .vf-error-message(v-if='error && !tooltipActive') {{ error }}
 	//- Tooltip message
