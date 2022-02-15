@@ -49,19 +49,23 @@
 		opacity 1
 		transform scale(1, 1)
 
+	input:checked ~ .checkbox-bkg
+		outline-color form-outline-checked
+
 	// Focus state
 	input.focus-visible ~ .checkbox-bkg
 		outline-color form-outline-focus
 		background form-bkg-hover
 
 	// Hover state
-	.checkbox-wrap:hover
-		.checkbox-bkg
-			background form-bkg-hover
-			outline-color form-outline-hover
+	@media (hover hover)
+		.checkbox-wrap:hover
+			.checkbox-bkg
+				background form-bkg-hover
+				outline-color form-outline-hover
 
-		.checkbox-icon svg path
-			fill form-color-hover
+			.checkbox-icon svg path
+				fill form-color-hover
 
 	// Error state
 	&.error
@@ -72,10 +76,11 @@
 		.checkbox-icon svg path
 			fill form-color-error-hover
 
-		// Error hover state
-		.checkbox-wrap:hover .checkbox-bkg
-			background form-bkg-error-hover
-			outline-color form-outline-error
+		@media (hover hover)
+			// Error hover state
+			.checkbox-wrap:hover .checkbox-bkg
+				background form-bkg-error-hover
+				outline-color form-outline-error
 
 	// Error message
 	.error-message
