@@ -27,8 +27,8 @@
 
 			tooltip-btn(v-if='tooltip' :tooltipActive='tooltipActive' @click.native='tooltipClick')
 
-	//- Error message
-	transition(name='vf-slide'): .vf-error-message(v-if='error && !tooltipActive') {{ error }}
+	//- Error message (role=alert so SRs read immediately)
+	transition(name='vf-slide'): .vf-error-message(v-if='error && !tooltipActive' role='alert') {{ error }}
 	//- Tooltip message
 	transition(name='vf-slide'): .vf-tooltip-message(v-if='tooltipActive') {{ tooltip }}
 
