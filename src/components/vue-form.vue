@@ -97,7 +97,12 @@ export default
 			@formData[name] = value
 			@valid[name] = valid
 			
-			# Sync our form data to the parent Vue component
+			# Emit our form data to the parent Vue component
+			# We emit for these events:
+			# * When a field mounts (once for each field)
+			# * When field data changes (once for each character typed)
+			# * When the user moves focus away from a field
+			# console.log 'vue-form: emitting because data has changed', {new: formDataString, old: @lastEmittedData}
 			@$emit 'update:form', @formData
 
 		validateForm: ->
