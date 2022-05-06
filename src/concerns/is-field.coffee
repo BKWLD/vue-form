@@ -34,9 +34,9 @@ export default
 
 	computed:
 		commonClasses: -> [
-			'error': !!@error
-			'disabled': @disabled
-			'has-tooltip' if @tooltip
+			if @showError and !!@error then 'error'
+			if @disabled then 'disabled'
+			if @tooltip then 'has-tooltip'
 		]
 
 	mounted: -> @$defer =>
