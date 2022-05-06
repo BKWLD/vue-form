@@ -69,11 +69,11 @@ export default
 		focusOut: (event) -> @$wait 100, () => 
 			@hasFocus = false
 			@validate()
+			@sendEvent()
 
 		# Send our field information to the form component using tiny-emitter
 		sendEvent: ->
-			# console.log 'sendEvent', @name, @value
-			emitter.emit 'vue-form-fieldupdated', { id: @id, name: @name, value: @value, valid: !@error }
+			emitter.emit 'vue-form-fieldupdated', { id: @id, name: @name, value: @value, valid: @valid }
 
 		# Fired when vue-form emits 'validatefields', which asks all fields to validate their data and return the results.
 		onValidateFields: (args) ->
@@ -82,13 +82,15 @@ export default
 			# Do nothing if this event was emitted from a different form.
 			return if id != @id
 
-			# console.log 'formEvent', {type}
 			# Form component has asked us to validate our input
 			# Show validation errors
+			@showError = true
 			# Clear the error, wait a tick, then validate.
 			# This is a hacky way to force the error messages to re-animate and get the user's attention.
 			@error = ''
-			@$nextTick => @validate()
+			@$nextTick => 
+				@validate()
+				@sendEvent()
 
 		# Pass through @click listener
 		onClick: (event) ->

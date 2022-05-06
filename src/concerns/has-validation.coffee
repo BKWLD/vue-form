@@ -10,51 +10,74 @@ export default
 			default: -> []
 
 	data: ->
+
+		# True when this field's data passes all the validation rules
+		valid: false
+
 		# Validation error message
 		error: ''
 
+		# If we should show the validation error
+		showError: false
+
+		# The field's value when the user focuses in
+		valueOnFocusIn: null
+
 	watch:
-		# Validate this field immediately each time the field value changes.
+
+		# Each time the field value changes, update @valid and emit @value.
 		value: -> 
-			# console.log "watch value. validate...", @value
 			@validate()
+			@sendEvent()
+
+		hasFocus: ->
+			if @hasFocus
+				# User has focused in
+				@valueOnFocusIn = @value
+			else
+				# User has focused out
+				# If the user has edited the field value and focused out, 
+				# then start allowing the field to show validation errors.
+				# This prevents showing validation errors when the user
+				# tabs through the fields without typing anything, 
+				# or when the user has typed the first character into an email field.
+				if @value != @valueOnFocusIn then @showError = true
+
 
 	methods:
-		
-		# Our main validation function
+
+		# Update @valid and @error based on the current field @value
+		# Do this by checking if @value satisfies all @rules.
 		validate: ->
-			# console.log 'validate', @name, @value
 
-			# If no rules, return true
+			# If no validation rules, always valid.
 			if !@rules?.length
-				@error = ''
-				@sendEvent()
-				return true
+				@valid = true
+				return
 
-			# Loop through rules, running each function on the field value.
-			# Each function returns true if valid, or a string with the validation error message.
-			# On first validation failure, save errorMessage and stop the loop.
 			errorMessage = ''
-			passedAllRules = @rules.every (ruleArg, index) =>
+			passedAllRules = true
+
+			# Loop through @rules
+			for ruleArg in @rules
+				# Get rule function.  Each function returns true if valid, or a string with the validation error message.
 				rule = @getRuleFunction ruleArg
+
+				# Run each rule function
 				errorMessage = rule(@value)
 
-				# Default message if ruleFunction returns false
+				# If no error message provided, use a default message.
 				if errorMessage == false then errorMessage = "Error: This field is invalid"
-				return errorMessage==true
 
-			# If we passed validation, clear the error message and return true
-			if passedAllRules
-				@error = ''
-				@sendEvent()
-				return true
+				# On first validation failure, save errorMessage and stop the whole function.
+				if errorMessage != true
+					@error = errorMessage
+					@valid = false
+					return
 
-			# If we failed validation and keyboard focus has moved outside this component, then show the error message.
-			# This way we don't show the error message while the user is still typing, which would be annoying.
-			if !@$el.contains document.activeElement
-				@error = errorMessage
-			@sendEvent()
-			return false
+			# We passed validation
+			@error = ''
+			@valid = true
 
 		# Look up validator function from a string
 		getRuleFunction: (rule) ->
@@ -65,7 +88,7 @@ export default
 				when 'notUrl' then notUrl
 				when 'notIpAddress' then notIpAddress
 				else
-					console.warn "Couldn't find validator rule for #{rule}"
+					console.warn "Couldn't find validator rule for \"#{rule}\""
 					# Fallback function that always returns true
 					return ()=>true
 
