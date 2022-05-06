@@ -20,6 +20,7 @@ form.vf-form(
 <!-- ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– -->
 
 <script lang='coffee'>
+import Vue from 'vue'
 import emitter from 'tiny-emitter/instance'
 
 export default
@@ -55,9 +56,20 @@ export default
 		valid: {} # Whether field values are valid (booleans)
 
 	computed:
+		
 		# Array of field IDs
 		fieldIds: -> Object.keys @formData
+		
 		submitted: -> @error || @success
+
+		# Number, zero to one, representing the ratio of fields with valid input.
+		validRatio: ->
+			# Array of booleans representing each field's validity
+			allFields = Object.values @valid
+			return 0 unless allFields?.length
+			validFields = allFields.filter (value) => return !!value
+			result = validFields?.length / allFields?.length
+			return result
 
 	mounted: ->
 		# Subscribe to child events
@@ -95,14 +107,13 @@ export default
 			
 			# Save our field's latest value
 			@formData[name] = value
-			@valid[name] = valid
+			Vue.set @valid, name, valid
 			
 			# Emit our form data to the parent Vue component
 			# We emit for these events:
 			# * When a field mounts (once for each field)
 			# * When field data changes (once for each character typed)
 			# * When the user moves focus away from a field
-			# console.log 'vue-form: emitting because data has changed', {new: formDataString, old: @lastEmittedData}
 			@$emit 'update:form', @formData
 
 		validateForm: ->
