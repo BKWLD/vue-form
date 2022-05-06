@@ -6,29 +6,64 @@
 	width 100%
 
 	label
-		color form-color-base
 		display block
-		padding-bottom form-input-label-above-padding
+		margin-bottom form-input-label-above-padding
+		color form-label-base
+
+	&.has-tooltip label
+		padding-right form-tooltip-btn-w * 2
 
 	.select
 		position relative
+		fluid height, form-input-height, form-input-height-min
 
+	// The actual <select> with <options> that appears on click
 	select
+		border none
+		appearance none
+		expand()
+		cursor pointer
+		text-overflow ellipsis
+
+		fluid height, form-input-height, form-input-height-min
+		fluid padding-h, form-input-padding-h, form-input-padding-h-min
+		background form-bkg-base
+		outline form-outline-width solid form-outline-base
+		outline-offset form-outline-offset
+		border-radius form-input-radius
 		min-width 250px
 		border none
 		cursor pointer
 		display block
-		font-weight bold
-		color form-color-base
 		width 100%
-		// Height
-		fluid height, form-input-height, form-input-height-min
-		// Padding
-		fluid padding-h, form-input-padding-h, form-input-padding-h-min
-		// Outline
-		outline form-outline-width solid form-outline-base
-		border-radius form-input-radius
+		color form-color-base
+		
+	// Chevron icon
+	.icon
+		position absolute
+		display block
+		color form-color-base
+		fluid right, form-input-padding-h, form-input-padding-h-min
+		top 50%
+		transform translateY(-50%)
+		pointer-events none
 
+	.vf-tooltip-btn
+		right 42px
+
+.vf-select:not(.error)
+	// Placeholder color
+	&.no-value
+		select
+			color form-color-placeholder
+
+			+hover()
+				color form-color-placeholder
+
+			&:focus, &:active
+				color form-color-placeholder
+
+	select
 		&:not([disabled])
 			// Hover state
 			+hover()
@@ -42,13 +77,6 @@
 				outline form-outline-width solid form-outline-focus
 				color form-color-focus
 				background form-bkg-focus
-				outline-offset form-outline-offset
-
-		// Error state
-		&.error
-			outline-color form-outline-error
-			color form-color-error
-			background form-bkg-error
 
 		// Disabled state
 		&[disabled]
@@ -56,16 +84,21 @@
 				color grey
 				opacity 1
 
-	// Chevron icon
-	.icon
-		position absolute
-		display block
-		color form-color-base
-		fluid right, form-input-padding-h, form-input-padding-h-min
-		top 50%
-		transform translateY(-50%)
-		pointer-events none
 
-	.vf-tooltip-btn
-		right 42px
+// Error state
+.vf-select.error
+	select
+		outline-color form-outline-error
+		color form-color-error
+		background form-bkg-error
+
+		+hover()
+			color form-color-error-hover
+			background form-bkg-error-hover
+			outline-color form-outline-error-hover
+
+		&:focus
+			color form-color-error-focus
+			background form-bkg-error-focus
+			outline-color form-outline-error-focus
 
