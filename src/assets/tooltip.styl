@@ -1,0 +1,52 @@
+// Wraps the button and popup
+.vf-tooltip
+	position absolute
+	right 0
+	top 50%
+	transform translateY(-48%)
+	width form-tooltip-btn-w
+	height form-tooltip-btn-w
+	z-index form-tooltip-z-index
+
+// Tooltip button
+.vf-tooltip-btn
+	width form-tooltip-btn-w
+	height form-tooltip-btn-w
+	background form-bkg-base
+	border-radius form-tooltip-btn-w
+	font-weight bold
+	font-size 14px
+	opacity 1
+	&.active
+		opacity 1
+	&:hover
+		opacity 0.8
+
+	outline-width form-outline-width
+	outline-offset form-outline-offset
+
+	.js-focus-visible &.focus-visible:focus
+		outline-color form-outline-focus
+
+
+.vf-tooltip-btn-icon
+	position relative
+	font-family sans-serif
+	font-weight bold
+	color form-color-base
+
+// Tooltip popup
+.vf-tooltip-popup
+	position absolute
+	left "calc(100% + %s)" % (form-tooltip-popup-offset)
+	top 0
+	width 380px
+	background form-bkg-base
+	color form-color-base
+	border-radius form-input-radius
+	padding 20px
+	line-height 1.5
+
+.vf-tooltip-popup-title
+	font-weight bold
+	padding-bottom 0.6em

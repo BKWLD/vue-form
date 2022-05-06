@@ -1,11 +1,18 @@
 <!--  -->
 
 <template lang='pug'>
-button.vf-tooltip-btn(
-	:class='tooltipActive ? "active" : ""'
-)
-	.vf-tooltip-bkg
-	.vf-tooltip-icon ?
+.vf-tooltip(:class='classes')
+	button.vf-tooltip-btn(
+		aria-label='More information'
+		:aria-expanded='active'
+		@click.prevent='onClick'
+	)
+		.vf-tooltip-btn-icon ?
+
+	transition(name='vf-slide')
+		.vf-tooltip-popup(v-if='active')
+			.vf-tooltip-popup-title(v-if='tooltipTitle') {{ tooltipTitle }}
+			.vf-tooltip-popup-message(v-if='tooltip') {{ tooltip }}
 
 </template>
 
@@ -13,12 +20,25 @@ button.vf-tooltip-btn(
 
 <script lang='coffee'>
 export default
+
 	props:
-		tooltipActive: Boolean
-# 	data: ->
-# 	computed:
-# 	watch:
-# 	methods:
+
+		tooltip: String
+
+		tooltipTitle: String
+	
+	data: -> active: false
+
+	computed:
+
+		classes: -> [
+			if @active then 'active'
+		]
+
+	methods:
+		
+		onClick: -> @active = !@active
+
 </script>
 
 <!-- ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– -->
