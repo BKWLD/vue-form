@@ -42,8 +42,9 @@ export default
 		]
 
 	mounted: -> @$defer =>
-		# On mounted, run sendEvent so that the form has our name, value, and validation status.
 		# We must defer so that the form component is ready to receive our event.
+		# Update @valid so it's accurate when we sendEvent
+		# Send the form our name, value, and validation status.
 		@sendEvent()
 		# Listen for events emitted by the form component
 		emitter.on 'vue-form-validatefields', @onValidateFields
@@ -53,6 +54,7 @@ export default
 		emitter.off 'vue-form-validatefields', @onValidateFields
 
 	methods:
+
 		tooltipClick: (event) ->
 			@tooltipActive = !@tooltipActive
 			event.preventDefault()
@@ -73,7 +75,7 @@ export default
 			# console.log 'sendEvent', @name, @value
 			emitter.emit 'vue-form-fieldupdated', { id: @id, name: @name, value: @value, valid: !@error }
 
-		# Listen for events emitted from the form component
+		# Fired when vue-form emits 'validatefields', which asks all fields to validate their data and return the results.
 		onValidateFields: (args) ->
 			{ id } = args
 
@@ -82,6 +84,7 @@ export default
 
 			# console.log 'formEvent', {type}
 			# Form component has asked us to validate our input
+			# Show validation errors
 			# Clear the error, wait a tick, then validate.
 			# This is a hacky way to force the error messages to re-animate and get the user's attention.
 			@error = ''
