@@ -4,6 +4,7 @@
 
 .vf-field.vf-checkbox(
 	:class='classes'
+	@focusin='focusIn'
 	@focusout='focusOut'
 )
 	//- Label element wraps the label, input, and checkbox so that clicking anything in here activates the checkbox.

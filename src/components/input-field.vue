@@ -1,11 +1,14 @@
 <!-- A standard textfield input -->
 
 <template lang='pug'>
-.vf-field.vf-inputfield(@focusout='focusOut' @click='onClick')
-	label.vf-label-above(:for='name' v-if='label') {{ label }}
+.vf-field.vf-inputfield(@focusin='focusIn' @focusout='focusOut' @click='onClick' :class='classes')
+
+	label.vf-label-above(:for='name' v-if='label')
+		| {{ label }}
+		tooltip-btn(v-if='tooltip || tooltipTitle' :tooltip='tooltip' :tooltipTitle='tooltipTitle')
+
 	.input-wrap
 		input(
-			:class='classes'
 			:name='name'
 			:id='name'
 			:placeholder='placeholder'
@@ -21,15 +24,11 @@
 			v-model='value'
 		)
 
-		tooltip-btn(v-if='tooltip' :tooltipActive='tooltipActive' @click.native='tooltipClick')
-
 		//- Default slot.  Lets you render extra buttons etc inside .input-wrap
 		slot
 
 	//- Error message (role=alert so SRs read immediately)
-	transition(name='vf-slide'): .vf-error-message(v-if='error && !tooltipActive' role='alert') {{ error }}
-	//- Tooltip message
-	transition(name='vf-slide'): .vf-tooltip-message(v-if='tooltipActive') {{ tooltip }}
+	transition(name='vf-slide'): .vf-error-message(v-if='showError && error' role='alert') {{ error }}
 </template>
 
 <!-- ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– -->

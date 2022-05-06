@@ -18,8 +18,12 @@ export default
 			type: Boolean
 			default: false
 
-		# Shows a "?" button inside the input which toggles a tooltip message.
+		# Shows a "?" button which toggles a tooltip message
 		tooltip:
+			type: String
+		
+		# Optional tooltip title
+		tooltipTitle:
 			type: String
 		
 	data: ->
