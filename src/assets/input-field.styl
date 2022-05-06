@@ -6,14 +6,21 @@
 		display block
 		position relative
 		margin-bottom form-input-label-above-padding
+		
+	&.has-tooltip label
+		padding-right form-tooltip-btn-w * 2
 
 	.input-wrap
 		position relative
 
 	input
-		// Text color
-		&, &::placeholder
-				color form-color-base
+		
+		// Input text color
+		color form-color-base
+		
+		// Placeholder
+		&::placeholder
+			color form-color-placeholder
 
 		// Background
 		background form-bkg-base
@@ -51,36 +58,38 @@
 				background form-bkg-focus
 				outline-offset form-outline-offset
 
-		// Error state
-		&.error
-			outline-color form-outline-error
-			background form-bkg-error
-			&, &::placeholder
-				color form-color-error
-
-			+hover()
-				color form-color-error-hover
-				background form-bkg-error-hover
-				outline-color form-outline-error-hover
-
-			&:focus
-				color form-color-error-focus
-				background form-bkg-error-focus
-				outline-color form-outline-error-focus
-
 		// Disabled state
 		&[disabled]
 			&, &::placeholder
 				color grey
 				opacity 1
 
-		&::-webkit-outer-spin-button,
-		&::-webkit-inner-spin-button
-			-webkit-appearance none
-			margin 0
+// Error state
+.vf-inputfield.error
+	input
+		outline-color form-outline-error
+		background form-bkg-error
+		&, &::placeholder
+			color form-color-error
 
-		[type=number]
-			-moz-appearance textfield
+		+hover()
+			color form-color-error-hover
+			background form-bkg-error-hover
+			outline-color form-outline-error-hover
+
+		&:focus
+			color form-color-error-focus
+			background form-bkg-error-focus
+			outline-color form-outline-error-focus
+
+.vf-inputfield
+	&::-webkit-outer-spin-button,
+	&::-webkit-inner-spin-button
+		-webkit-appearance none
+		margin 0
+
+	[type=number]
+		-moz-appearance textfield
 
 	// transparent placeholder on focus
 	input:focus::placeholder
