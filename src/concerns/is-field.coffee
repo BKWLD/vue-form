@@ -29,6 +29,8 @@ export default
 		# Tooltip state
 		tooltipActive: false
 
+		hasFocus: false
+
 	# Inject @id from form-field
 	inject: ['id']
 
@@ -55,15 +57,15 @@ export default
 			@tooltipActive = !@tooltipActive
 			event.preventDefault()
 
+		# Focusin handler
+		focusIn: -> 
+			@hasFocus = true
+
 		# Focusout handler
 		# We must defer, or else 'document.activeElement' is sometimes 'body'
 		# TODO: figure this out... 100ms is definite code smell
 		focusOut: (event) -> @$wait 100, () => 
-			# If keyboard focus is still inside this component (such as the user clicked 
-			# from the tooltip to the input), then ignore the event.
-			return if @$el.contains document.activeElement
-			# If keyboard focus has left this component, then close the tooltip and validate the input.
-			@tooltipActive = false
+			@hasFocus = false
 			@validate()
 
 		# Send our field information to the form component using tiny-emitter
