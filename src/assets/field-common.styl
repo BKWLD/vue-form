@@ -1,6 +1,3 @@
-// Load variables
-@import '../assets/definitions.styl'
-
 // Styles shared by all fields
 
 .vf-field
@@ -15,42 +12,6 @@
 	height 0px
 	padding-top 6px
 	margin-bottom -6px
-
-// Tooltip message (similar to error message)
-.vf-tooltip-message
-	color form-label-base
-	font-size 0.85em
-	// Don't shift the layout
-	height 0px
-	padding-top 6px
-	margin-bottom -6px
-
-// Tooltip
-tooltip-size = 23px
-.vf-tooltip-btn
-	position absolute
-	right 12px
-	top 50%
-	transform translateY(-48%)
-	width form-tooltip-btn-w
-	height form-tooltip-btn-w
-	color form-bkg-base
-	font-weight bold
-	font-size 14px
-	opacity 0.6
-	&.active
-		opacity 0.8
-	&:hover
-		opacity 1
-
-.vf-tooltip-icon
-	position relative
-
-.vf-tooltip-bkg
-	expand()
-	height 95%
-	background form-color-base
-	border-radius form-tooltip-btn-w
 
 // Transition for error message and tooltip message
 .vf-slide-enter-active, .vf-slide-leave-active
