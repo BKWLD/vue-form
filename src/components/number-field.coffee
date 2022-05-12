@@ -13,7 +13,6 @@ export default
 	# Render an input field
 	render: (create, { props, data, children, scopedSlots }) ->
 
-		# Instantiate a Visual instance
 		create InputField, {
 			...data
 			props: {
@@ -21,6 +20,6 @@ export default
 				...props
 				# Set type=number
 				type: 'number'
-
-		# Passthrough slot
-		}}, children
+			}
+		# Passthrough children (slot contents)
+		}, children
