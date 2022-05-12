@@ -84,7 +84,9 @@ export default
 
 		# Number field props
 		max: Number
-		min: Number
+		min: 
+			type: Number
+			default: 0
 		step: Number
 
 	computed:
