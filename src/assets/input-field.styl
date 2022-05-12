@@ -18,8 +18,7 @@
 	input
 		
 		// Input text color
-		color form-color-base
-		~ .prefix
+		&, ~ .prefix, ~ .suffix
 			color form-color-base
 		
 		// Placeholder
@@ -32,19 +31,22 @@
 		// Fill container
 		width 100%
 
-		// Give it a fluid height
-		fluid height, form-input-height, form-input-height-min
-
-		// Push text away from margins
-		padding-right var(--form-input-padding-h)
+		&, ~ .suffix
+			// Give it a fluid height
+			fluid height, form-input-height, form-input-height-min
+			
+			// Push text away from margins
+			padding-right var(--form-input-padding-h)
 
 	&.no-prefix input
-		padding-left var(--form-input-padding-h)
+		&, ~ .suffix
+			padding-left var(--form-input-padding-h)
 
 	&.has-prefix input
-		// Move input text right to make space for prefix.
-		// Individual implementations will likely have to customize this
-		padding-left calc(var(--form-input-padding-h) + 0.7em)
+		&, ~ .suffix
+			// Move input text right to make space for prefix.
+			// Individual implementations will likely have to customize this
+			padding-left calc(var(--form-input-padding-h) + 0.7em)
 
 	input
 
@@ -63,9 +65,6 @@
 				outline-color form-outline-hover
 				color form-color-hover
 				background form-bkg-hover
-
-				~ .prefix
-					color form-color-hover
 
 			// Focus state
 			&:focus
@@ -86,6 +85,30 @@
 		top 50%
 		transform translateY(-50%)
 		fluid left, form-input-padding-h, form-input-padding-h-min
+
+	// Prefix matches placeholder color
+	&.no-value input ~ .prefix
+		color form-color-placeholder
+
+	// Prefix has hover color only when it's not a placeholder
+	&.has-value input:not([disabled])
+		+hover()
+			~ .prefix
+				color form-color-hover
+
+
+	.suffix
+		position absolute
+		top 0
+		left 1px // A bit extra space between value and suffix
+		display flex
+		align-items center
+		pointer-events none
+	
+	// This suffix value is hidden, and exists solely to properly position the suffix.
+	.suffix-value
+		opacity 0
+		color transparent
 
 // Error state
 .vf-inputfield.error

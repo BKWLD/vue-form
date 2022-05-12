@@ -4,23 +4,32 @@
 .vf-field.vf-inputfield(@focusin='focusIn' @focusout='focusOut' @click='onClick' :class='classes')
 
 	label.vf-label-above(:for='name' v-if='label')
+
 		| {{ label }}
+
 		tooltip-btn(v-if='tooltip || tooltipTitle' :tooltip='tooltip' :tooltipTitle='tooltipTitle')
 
 	.input-wrap
 		input(
 			:name='name'
 			:id='name'
-			:placeholder='placeholder'
+			:placeholder='placeholderComputed'
 			:aria-label='label'
 			v-bind='attrs'
 			v-model='value'
 		)
+		
 		.prefix(
 			v-if='prefix'
 			aria-hidden='true'
-
 		) {{ prefix }}
+
+		.suffix(
+			v-if='suffix'
+			aria-hidden='true'
+		)
+			div.suffix-value {{ value }}
+			div.suffix-suffix(v-html='suffixComputed')
 
 		//- Default slot.  Lets you render extra buttons etc inside .input-wrap
 		slot
@@ -82,6 +91,11 @@ export default
 			type: String
 			default: null
 
+		# For adding a suffix, such as '%'
+		suffix:
+			type: String
+			default: null
+
 		# Number field props
 		max: Number
 		min: 
@@ -90,12 +104,20 @@ export default
 		step: Number
 
 	computed:
+
 		classes: -> [
 			...@commonClasses
 			if @prefix then 'has-prefix' else 'no-prefix'
 		]
 
-		placeholderComputed: -> "#{ @prefix || "" }#{ @placeholder || "" }"
+		suffixComputed: ->
+			# Hide suffix if the value is blank and there's no placeholder
+			return if @value == ''
+			# Convert spaces to nbsp, otherwise it would collapse leading spaces
+			@suffix.replaceAll(' ', '&nbsp;')
+
+		# Add suffix to placeholder
+		placeholderComputed: -> "#{ @placeholder || '' }#{ @suffix || '' }"
 
 		attrs: ->
 			attrs = {

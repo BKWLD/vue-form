@@ -43,6 +43,7 @@ export default
 			if @showError and !!@error then 'error'
 			if @disabled then 'disabled'
 			if @tooltip then 'has-tooltip'
+			if @value=='' then 'no-value' else 'has-value'
 		]
 
 	mounted: -> @$defer =>
