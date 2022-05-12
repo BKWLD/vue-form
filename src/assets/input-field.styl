@@ -2,6 +2,8 @@
 	width 100%
 	color form-label-base
 
+	fluid --form-input-padding-h, form-input-padding-h, form-input-padding-h-min
+	
 	label
 		display block
 		position relative
@@ -17,6 +19,8 @@
 		
 		// Input text color
 		color form-color-base
+		~ .prefix
+			color form-color-base
 		
 		// Placeholder
 		&::placeholder
@@ -29,10 +33,20 @@
 		width 100%
 
 		// Give it a fluid height
-		fluid height, form-input-height, form-input-height-min
+	fluid height, form-input-height, form-input-height-min
 
 		// Push text away from margins
-		fluid padding-h, form-input-padding-h, form-input-padding-h-min
+		padding-right var(--form-input-padding-h)
+
+	&.no-prefix input
+		padding-left var(--form-input-padding-h)
+
+	&.has-prefix input
+		// Move input text right to make space for prefix.
+		// Individual implementations will likely have to customize this
+		padding-left calc(var(--form-input-padding-h) + 0.7em)
+
+	input
 
 		// Outline
 		outline form-outline-width solid form-outline-base
@@ -50,6 +64,9 @@
 				color form-color-hover
 				background form-bkg-hover
 
+				~ .prefix
+					color form-color-hover
+
 			// Focus state
 			&:focus
 				transition-duration (form-base-speed/2)
@@ -64,12 +81,18 @@
 				color grey
 				opacity 1
 
+	.prefix
+		position absolute
+		top 50%
+		transform translateY(-50%)
+		fluid left, form-input-padding-h, form-input-padding-h-min
+
 // Error state
 .vf-inputfield.error
 	input
 		outline-color form-outline-error
 		background form-bkg-error
-		&, &::placeholder
+		&, &::placeholder, ~ .prefix
 			color form-color-error
 
 		+hover()

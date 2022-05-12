@@ -13,16 +13,14 @@
 			:id='name'
 			:placeholder='placeholder'
 			:aria-label='label'
-			:type='type'
-			:required='required'
-			:disabled='readonly'
-			:autocomplete='autocomplete'
-			:autocorrect='autocorrect'
-			:autocapitalize='autocapitalize'
-			:minlength='minlength'
-			:maxlength='maxlength'
+			v-bind='attrs'
 			v-model='value'
 		)
+		.prefix(
+			v-if='prefix'
+			aria-hidden='true'
+
+		) {{ prefix }}
 
 		//- Default slot.  Lets you render extra buttons etc inside .input-wrap
 		slot
@@ -52,7 +50,8 @@ export default
 		# Type of textfield
 		type:
 			type: String
-			default: 'text'
+			default: 'input'
+			validator: (val) -> val in ['input', 'number']
 
 		placeholder:
 			type: String
@@ -78,10 +77,46 @@ export default
 			type: String
 			default: '100'
 
+		# For adding a prefix, such as '$'
+		prefix:
+			type: String
+			default: null
+
+		# Number field props
+		max: Number
+		min: Number
+		step: Number
+
 	computed:
 		classes: -> [
 			...@commonClasses
+			if @prefix then 'has-prefix' else 'no-prefix'
 		]
+
+		placeholderComputed: -> "#{ @prefix || "" }#{ @placeholder || "" }"
+
+		attrs: ->
+			attrs = {
+				type: @type
+				required: @required
+				disabled: @readonly
+				autocomplete: @autocomplete
+				autocorrect: @autocorrect
+				autocapitalize: @autocapitalize
+				minlength: @minlength
+				maxlength: @maxlength
+			}
+
+			if @type == 'number'
+				# Add number attributes
+				attrs = {
+					...attrs
+					max: @max
+					min: @min
+					step: @step
+				}
+
+			return attrs
 
 </script>
 
