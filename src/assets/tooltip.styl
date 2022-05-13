@@ -4,6 +4,7 @@
 	right 0
 	top 50%
 	transform translateY(-48%)
+	display flex // Center contents vertically
 	width form-tooltip-btn-w
 	height form-tooltip-btn-w
 	z-index form-tooltip-z-index
@@ -15,7 +16,7 @@
 	background form-bkg-base
 	border-radius form-tooltip-btn-w
 	font-weight bold
-	font-size 14px
+	font-size (form-tooltip-btn-w * 0.8)
 	opacity 1
 	&.active
 		opacity 1
