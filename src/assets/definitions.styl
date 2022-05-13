@@ -58,3 +58,16 @@ form-checkbox-radius ?= form-input-radius / 3
 form-tooltip-btn-w ?= 20px // Button size
 form-tooltip-popup-offset ?= 20px // Distance between the button and the popup
 form-tooltip-z-index = 10 // So the tooltip popup stacks on top of nearby position:sticky elements
+
+// Mixins for applying styles to common groups of elements
+vf-all-input-text()
+	.vf-select select
+	.vf-inputfield input
+		&, ~ .prefix, ~ .suffix
+			{ block }
+
+vf-all-labels()
+	.vf-label-above,
+	.label,
+	label
+		{ block }
