@@ -101,7 +101,10 @@ export default
 		min: 
 			type: Number
 			default: 0
-		step: Number
+		step: 
+			type: [Number, String]
+			# Step must be 'any' for non-integer values to pass browser-native validation
+			default: 'any'
 
 	computed:
 
