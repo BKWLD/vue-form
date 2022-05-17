@@ -10,9 +10,7 @@
 		.vf-tooltip-btn-icon ?
 
 	transition(name='vf-slide')
-		.vf-tooltip-popup(v-if='active')
-			.vf-tooltip-popup-title(v-if='tooltipTitle') {{ tooltipTitle }}
-			.vf-tooltip-popup-message(v-if='tooltip') {{ tooltip }}
+		.vf-tooltip-popup(v-if='active'): slot
 
 </template>
 
@@ -20,12 +18,6 @@
 
 <script lang='coffee'>
 export default
-
-	props:
-
-		tooltip: String
-
-		tooltipTitle: String
 	
 	data: -> active: false
 

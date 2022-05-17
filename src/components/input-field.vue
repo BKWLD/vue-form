@@ -7,7 +7,7 @@
 
 		| {{ label }}
 
-		tooltip-btn(v-if='tooltip || tooltipTitle' :tooltip='tooltip' :tooltipTitle='tooltipTitle')
+		slot(name='label')
 
 	.input-wrap
 		input(
@@ -43,16 +43,11 @@
 <script lang='coffee'>
 import isField from '../concerns/is-field'
 import hasValidation from '../concerns/has-validation'
-import TooltipBtn from '../components-private/tooltip-btn.vue'
 
 export default
 	name: 'InputField'
 
 	mixins: [ isField, hasValidation ]
-
-	components: {
-		TooltipBtn
-	}
 
 	props:
 

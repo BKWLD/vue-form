@@ -1,9 +1,18 @@
+// Root element
 .vf-inputfield
 	width 100%
 	color form-label-base
 
 	fluid --form-input-padding-h, form-input-padding-h, form-input-padding-h-min
-	
+
+	&::-webkit-outer-spin-button,
+	&::-webkit-inner-spin-button
+		-webkit-appearance none
+		margin 0
+
+	[type=number]
+		-moz-appearance textfield
+
 	label
 		display block
 		position relative
@@ -48,6 +57,9 @@
 			// Individual implementations will likely have to customize this
 			padding-left calc(var(--form-input-padding-h) + 0.7em)
 
+	&.no-value .suffix
+		display none
+
 	input
 
 		// Outline
@@ -58,6 +70,11 @@
 
 		// Animation
 		transition color form-base-speed
+
+		// Transparent placeholder on focus
+		&:focus::placeholder
+			color transparent
+
 
 		&:not([disabled])
 			// Hover state
@@ -111,7 +128,7 @@
 		color transparent
 
 // Error state
-.vf-inputfield.error
+>>> .vf-inputfield.error
 	input
 		outline-color form-outline-error
 		background form-bkg-error
@@ -127,17 +144,4 @@
 			color form-color-error-focus
 			background form-bkg-error-focus
 			outline-color form-outline-error-focus
-
-.vf-inputfield
-	&::-webkit-outer-spin-button,
-	&::-webkit-inner-spin-button
-		-webkit-appearance none
-		margin 0
-
-	[type=number]
-		-moz-appearance textfield
-
-	// transparent placeholder on focus
-	input:focus::placeholder
-		color transparent
 
