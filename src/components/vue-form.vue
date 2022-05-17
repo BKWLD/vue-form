@@ -80,11 +80,15 @@ export default
 		emitter.off 'vue-form-fieldupdated', @onFieldUpdated
 
 	methods:
+
 		onSubmit: ->
+
 			# Sync form data to parent
 			@$emit 'update:form', @formData
+
 			# Check if all fields are valid
 			@hasValidationErrors = @validateForm()
+
 			# Wait for the field components to send us results
 			@$defer =>
 				return unless @allFieldsValid
