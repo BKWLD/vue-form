@@ -17,18 +17,13 @@ export default
 		disabled:
 			type: Boolean
 			default: false
-
-		# Shows a "?" button which toggles a tooltip message
-		tooltip:
-			type: String
 		
-		# Optional tooltip title
-		tooltipTitle:
+		default:
 			type: String
 		
 	data: ->
 		# Set initial value to @default prop if provided.
-		value: ''
+		value: @default
 		
 		# Tooltip state
 		tooltipActive: false
@@ -43,7 +38,7 @@ export default
 			if @showError and !!@error then 'error'
 			if @disabled then 'disabled'
 			if @tooltip then 'has-tooltip'
-			if @value=='' then 'no-value' else 'has-value'
+			if (@value=='' || @value==undefined) then 'no-value' else 'has-value'
 		]
 
 	mounted: -> @$defer =>
