@@ -30,7 +30,9 @@ export default
 			@validate()
 			@sendEvent()
 
+		# ShowError logic
 		hasFocus: ->
+			return if @showError
 			if @hasFocus
 				# User has focused in
 				@valueOnFocusIn = @value
