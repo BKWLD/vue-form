@@ -25,9 +25,6 @@ export default
 		# Set initial value to @default prop if provided.
 		value: @default
 		
-		# Tooltip state
-		tooltipActive: false
-
 		hasFocus: false
 
 	# Inject @id from form-field
@@ -37,7 +34,6 @@ export default
 		commonClasses: -> [
 			if @showError and !!@error then 'error'
 			if @disabled then 'disabled'
-			if @tooltip then 'has-tooltip'
 			if (@value=='' || @value==undefined) then 'no-value' else 'has-value'
 		]
 
@@ -54,10 +50,6 @@ export default
 		emitter.off 'vue-form-validatefields', @onValidateFields
 
 	methods:
-
-		tooltipClick: (event) ->
-			@tooltipActive = !@tooltipActive
-			event.preventDefault()
 
 		# Focusin handler
 		focusIn: -> 
