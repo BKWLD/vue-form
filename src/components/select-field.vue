@@ -4,6 +4,8 @@
 .vf-field.vf-select(@focusin='focusIn' @focusout='focusOut' @click='onClick' :class='classes')
 	label.vf-label-above(:for='name')
 		| {{ label }}
+
+		//- Label slot.  Render custom elements inside label.
 		slot(name='label')
 
 	.select
@@ -25,11 +27,13 @@
 				:value='option.value'
 			) {{ option.label }}
 
-		//- Arrow icon
+		//- Icon
 		.icon
-			slot(name='arrow'): svg(height="16" viewBox="0 0 16 16" width="16" xmlns="http://www.w3.org/2000/svg"): path(d="m16 5.5-2-2-6 6-6-6-2 2 8 8z")
+			//- Icon slot.  Replace the default icon with your own.
+			slot(name='icon'): svg(height="16" viewBox="0 0 16 16" width="16" xmlns="http://www.w3.org/2000/svg"): path(d="m16 5.5-2-2-6 6-6-6-2 2 8 8z")
 
-		slot
+		//- Default slot.  Render custom elements inside .select
+		slot(:value='value' :setValue='setValue')
 
 	//- Error message (role=alert so SRs read immediately)
 	transition(name='vf-slide'): .vf-error-message(v-if='showError && error' role='alert') {{ error }}

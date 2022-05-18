@@ -51,6 +51,8 @@ export default
 
 	methods:
 
+		setValue: (newValue) -> @value = newValue
+
 		# Focusin handler
 		focusIn: -> 
 			@hasFocus = true

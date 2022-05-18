@@ -7,6 +7,7 @@
 
 		| {{ label }}
 
+		//- Label slot.  Render custom elements inside label.
 		slot(name='label')
 
 	.input-wrap
@@ -31,8 +32,8 @@
 			div.suffix-value {{ value }}
 			div.suffix-suffix(v-html='suffixComputed')
 
-		//- Default slot.  Lets you render extra buttons etc inside .input-wrap
-		slot
+		//- Default slot.  Render custom elements inside .input-wrap
+		slot(:value='value' :setValue='setValue')
 
 	//- Error message (role=alert so SRs read immediately)
 	transition(name='vf-slide'): .vf-error-message(v-if='showError && error' role='alert') {{ error }}
