@@ -1,7 +1,7 @@
 <!-- A standard textfield input -->
 
 <template lang='pug'>
-.vf-field.vf-inputfield(@focusin='focusIn' @focusout='focusOut' @click='onClick' :class='classes')
+.vf-field.vf-input(@focusin='focusIn' @focusout='focusOut' @click='onClick' :class='classes')
 
 	label.vf-label-above(:for='name' v-if='label')
 
