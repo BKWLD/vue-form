@@ -73,7 +73,8 @@ export default
 
 	computed:
 		
-		# Allow each option to be a label and value string formatted like "First Name | firstName"
+		# Allow each option to be a string with label and value
+		# formatted like "First Name | firstName"
 		optionsComputed: -> @options?.map (option) =>
 			arr = option?.split?(/(?:\s)+(?:\|)+(?:\s)+/)
 			return
