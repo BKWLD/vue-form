@@ -1,39 +1,125 @@
-// Not used yet!
+// Fieldset and Legend CSS Reset
+// https://thatemil.com/blog/2015/01/03/reset-your-fieldset/
+fieldset
+	border 0
+	// Padding-top required in order to collapse margin-top in Safari
+	padding 0.01em 0 0 0
+	margin 0
+	min-width 0
 
-radio-style()
-	size = 16px
-	innerSize = 10px
-	display inline-flex
-	align-items center
-	cursor pointer
-	margin-right spacing-s
-	margin-bottom spacing-s
+legend
+	padding 0
+	// Required to enable line wrapping in Chrome
+	display table
 
-	&.boxed
-		border 1px solid ui-grey
-		border-radius input-box-radius
+body:not(:-moz-handler-blocked) fieldset {
+	// Required to enable line wrapping in FF
+	display table-cell
+}
+
+// Mixins
+vf-radio-option-checked()
+	.vf-radio input:checked ~ .option
+		{ block }
+
+vf-radio-option-unchecked()
+	.vf-radio input:not(:checked) ~ .option
+		{ block }
+
+.vf-radio
+
+	.group-label
 		width 100%
-
-	.radio
-		circle(size)
-		border 1px solid ui-grey
+		// Position:relative so slotted contents can be position:absolute
 		position relative
-		flex-center()
-		margin-right spacing-xs
-		flex-shrink 0
-
-	.radio:after
-		content ''
-		display block
-		width innerSize
-		height innerSize
-		border-radius 50%
-		background color-primary
-		transition opacity (base-speed/2) ease-out
-		opacity 0
 
 	input[type=radio]
-		display none
+		// Must not be display:none in order to be tabbable
+		opacity 0
+		width 0
 
-	input:checked ~ .radio:after
+	.option
+		display flex
+		flex-wrap nowrap
+		align-items flex-start
+		cursor pointer
+
+	.option-label
+		position relative
+		// Vertically center the first line of text with the checkbox
+		// Based off the radio size so it scales automatic-ish
+		padding-top (form-radio-size / 14)
+		fluid margin-h, form-input-padding-h, form-input-padding-h-min
+
+	.icon-wrap
+		position relative
+		width form-radio-size
+		height form-radio-size
+		// Border-radius goes here too because
+		// this element renders the outline.
+		border-radius form-radio-radius
+		outline form-outline-width solid form-outline-base
+		outline-offset form-outline-offset
+
+	.icon-bkg, .icon
+		width form-radio-size
+		height form-radio-size
+		center()
+		transform-origin 50% 50%
+		
+		div
+			width 100%
+			height 100%
+			border-radius form-radio-radius
+			
+	.icon-bkg div
+		outline form-outline-width solid form-outline-base
+		outline-offset form-outline-offset
+		background form-bkg-base
+
+	.icon div
+		background transparent
+
+	.icon 
+		transition transform form-base-speed form-easing-function, opacity (form-base-speed/1.25)
+
+// Unchecked
+.vf-radio input:not(:checked) ~ .option
+	.icon 
+		opacity 0
+		transform translate(50%, -50%) scale(0.2)
+
+// Unchecked Focus
+.vf-radio input.focus-visible:not(:checked) ~ .option
+	.icon-wrap
+		outline-color form-outline-focus
+
+// Unchecked Hover
+@media (hover hover)
+	.vf-radio input:not(:checked):hover ~ .option
+		.icon-wrap
+			outline-color form-outline-hover
+		.icon-bkg div
+			background form-bkg-hover
+
+// Checked
+.vf-radio input:checked ~ .option
+	.icon
 		opacity 1
+		transform translate(50%, -50%) scale(0.8)
+		div
+			background form-bkg-selected
+
+// Checked Focus
+.vf-radio input.focus-visible:checked ~ .option
+	.icon-wrap
+		outline-color form-outline-focus
+
+// Checked Hover
+@media (hover hover)
+	.vf-radio input:checked:hover ~ .option
+		.icon-wrap
+			outline-color form-outline-hover
+		.icon div
+			background darken(form-bkg-selected, form-hover-darken-factor)
+
