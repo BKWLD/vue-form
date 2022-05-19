@@ -1,4 +1,4 @@
-// Fieldset and Legend CSS Reset
+// CSS Reset on 'fieldset' and 'legend' elements
 // https://thatemil.com/blog/2015/01/03/reset-your-fieldset/
 fieldset
 	border 0
@@ -18,13 +18,41 @@ body:not(:-moz-handler-blocked) fieldset {
 }
 
 // Mixins
+
+// Checked
 vf-radio-option-checked()
 	.vf-radio input:checked ~ .option
 		{ block }
 
+// Checked Hover
+vf-radio-option-checked-hover()
+	@media (hover hover)
+		.vf-radio input:checked:hover ~ .option
+			{ block }
+
+// Checked Focus
+vf-radio-option-checked-focus()
+	.vf-radio input.focus-visible:checked ~ .option
+		{ block }
+
+// Unchecked
 vf-radio-option-unchecked()
 	.vf-radio input:not(:checked) ~ .option
 		{ block }
+
+// Unchecked Hover
+vf-radio-option-unchecked-hover()
+	@media (hover hover)
+		.vf-radio input:not(:checked):hover ~ .option
+			{ block }
+
+// Unchecked Focus
+vf-radio-option-unchecked-focus()
+	.vf-radio input.focus-visible:not(:checked) ~ .option
+		{ block }
+
+
+// Radio Field Base Styles
 
 .vf-radio
 
@@ -84,42 +112,40 @@ vf-radio-option-unchecked()
 		transition transform form-base-speed form-easing-function, opacity (form-base-speed/1.25)
 
 // Unchecked
-.vf-radio input:not(:checked) ~ .option
++vf-radio-option-unchecked()
 	.icon 
 		opacity 0
 		transform translate(50%, -50%) scale(0.2)
 
+// Unchecked Hover
++vf-radio-option-unchecked-hover()
+	.icon-wrap
+		outline-color form-outline-hover
+	.icon-bkg div
+		background form-bkg-hover
+
 // Unchecked Focus
-.vf-radio input.focus-visible:not(:checked) ~ .option
++vf-radio-option-unchecked-focus()
 	.icon-wrap
 		outline-color form-outline-focus
 
-// Unchecked Hover
-@media (hover hover)
-	.vf-radio input:not(:checked):hover ~ .option
-		.icon-wrap
-			outline-color form-outline-hover
-		.icon-bkg div
-			background form-bkg-hover
-
 // Checked
-.vf-radio input:checked ~ .option
++vf-radio-option-checked()
 	.icon
 		opacity 1
 		transform translate(50%, -50%) scale(0.8)
 		div
 			background form-bkg-selected
 
+// Checked Hover
++vf-radio-option-checked-hover()
+	.icon-wrap
+		outline-color form-outline-hover
+	.icon div
+		background darken(form-bkg-selected, form-hover-darken-factor)
+
 // Checked Focus
-.vf-radio input.focus-visible:checked ~ .option
++vf-radio-option-checked-focus()
 	.icon-wrap
 		outline-color form-outline-focus
-
-// Checked Hover
-@media (hover hover)
-	.vf-radio input:checked:hover ~ .option
-		.icon-wrap
-			outline-color form-outline-hover
-		.icon div
-			background darken(form-bkg-selected, form-hover-darken-factor)
 
