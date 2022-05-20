@@ -1,0 +1,162 @@
+// CSS overrides based off
+// https://www.w3schools.com/howto/howto_js_rangeslider.asp
+
+
+// Slider Thumb Mixins
+// Doing these 2 selectors separately because 
+// combining them with a comma caused them to break for me. 🤷‍♂️
+vf-slider-thumb()
+	.vf-slider input::-webkit-slider-thumb
+		{ block }
+	.vf-slider input::-moz-range-thumb 
+		{ block }
+
+vf-slider-thumb-hover()
+	@media(hover hover)
+		.vf-slider input:hover::-webkit-slider-thumb
+			{ block }
+		.vf-slider input:hover::-moz-range-thumb 
+			{ block }
+
+vf-slider-thumb-focus()
+	.vf-slider input:focus::-webkit-slider-thumb
+		{ block }
+	.vf-slider input:focus::-moz-range-thumb 
+		{ block }
+
+vf-slider-thumb-error()
+	.vf-slider.error input::-webkit-slider-thumb
+		{ block }
+	.vf-slider.error input::-moz-range-thumb 
+		{ block }
+
+vf-slider-thumb-error-hover()
+	.vf-slider.error input:hover::-webkit-slider-thumb
+		{ block }
+	.vf-slider.error input:hover::-moz-range-thumb 
+		{ block }
+
+vf-slider-thumb-error-focus()
+	.vf-slider.error input:focus::-webkit-slider-thumb
+		{ block }
+	.vf-slider.error input:focus::-moz-range-thumb 
+		{ block }
+
+
+// Slider Base Styles
+.vf-slider
+	
+	fluid --form-input-padding-h, form-input-padding-h, form-input-padding-h-min
+
+	label
+		position relative
+		display block
+		margin-bottom form-input-label-above-padding
+
+	.input-wrap
+		position relative
+
+	// Slider Bar Hit Area (visually hidden)
+	// Visually hidden so it can offer a spacious hit area
+	// even if the visual slider bar is very thin
+	input
+		position relative
+		width 100%
+		appearance none // Override default CSS styles
+		border none
+		cursor pointer
+		// Set height to handle size to increase hit area
+		height (form-slider-handle-size * 2)
+
+	// Slider Bars
+	.slider-bar-bkg, .slider-bar-progress
+		position absolute
+		left 0
+		top 50%
+		width 100%
+		height form-slider-bar-height
+		transform translateY(-50%)
+
+	// Slider Bar Background
+	.slider-bar-bkg
+		background form-bkg-base
+
+	// Slider Bar Progress (goes from left edge to the slider handle)
+	.slider-bar-progress
+		background form-bkg-selected
+
+	.values
+		display flex
+		flex-direction row
+	
+	.value-current-wrap
+		position relative
+		display flex
+		flex-grow 1
+		margin-h var(--form-input-padding-h)
+		// background rgba(form-bkg-selected, .3)
+
+	.value-current
+		// background rgba(form-bkg-selected, .3)
+		// This is the only way I found to prevent value + suffix from line wrapping,
+		// besides doing v-html + &nbsp :/
+		white-space nowrap
+
+// Slider Thumb
++vf-slider-thumb()
+	position relative
+	appearance none // Override default CSS styles
+	width form-slider-handle-size
+	height form-slider-handle-size
+	border-radius 50%
+	cursor pointer
+	background form-bkg-selected
+	outline form-outline-width solid form-outline-base
+	outline-offset form-outline-offset
+
+// Hover
+@media( hover hover )
+	.vf-slider
+		input:hover
+			&:before
+				outline-color form-outline-hover
+				background form-bkg-hover
+
++vf-slider-thumb-hover()
+	background form-bkg-selected-hover
+	outline-color form-outline-hover
+
+// Focus
+.vf-slider
+	input:focus
+		outline none
+		
+		&:before
+			background form-bkg-focus
+
++vf-slider-thumb-focus()
+	outline-color form-outline-focus
+
+// Error
+.vf-slider.error
+	input:before
+		background form-bkg-error
+
++vf-slider-thumb-error()
+	outline-color form-outline-error
+
+// Error Hover
+.vf-slider.error
+	input:hover:before
+		background form-bkg-error-hover
+
++vf-slider-thumb-error-hover()
+	outline-color form-outline-error-hover
+	
+// Error Focus
+.vf-slider.error
+	input:focus:before
+		background form-bkg-error-focus
+
++vf-slider-thumb-error-focus()
+	outline-color form-outline-error-focus
