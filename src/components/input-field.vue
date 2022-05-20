@@ -122,7 +122,8 @@ export default
 			attrs = {
 				type: @type
 				required: @required
-				disabled: @readonly
+				readonly: @readonly
+				disabled: @disabled
 				autocomplete: @autocomplete
 				autocorrect: @autocorrect
 				autocapitalize: @autocapitalize
