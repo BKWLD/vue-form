@@ -28,7 +28,7 @@ export default
 		hasFocus: false
 
 	# Inject @id from form-field
-	inject: ['id']
+	inject: id: default: 0
 
 	computed:
 		commonClasses: -> [
@@ -89,3 +89,11 @@ export default
 		# Pass through @click listener
 		onClick: (event) ->
 			@$listeners?.click?()
+
+	watch:
+		# Emit 'input' event so fields can be used standalone with v-model.
+		# Standalone usage looks like this:
+			# template
+			# 	input-field(v-model='firstName' :default='firstName')`
+			# data: -> firstName: 'Fred'
+		value: -> @$emit 'input', @value
