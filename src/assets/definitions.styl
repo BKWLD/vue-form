@@ -21,10 +21,15 @@ form-focus-darken-factor ?= 15%
 form-bkg-base ?= transparent
 form-bkg-hover ?= darken(form-bkg-base, form-hover-darken-factor)
 form-bkg-focus ?= darken(form-bkg-base, form-focus-darken-factor)
+// Background color when validation error
 form-bkg-error ?= form-bkg-base
 form-bkg-error-hover ?= darken(form-bkg-error, form-hover-darken-factor)
 form-bkg-error-focus ?= darken(form-bkg-error, form-focus-darken-factor)
-form-bkg-selected ?= form-default-blue // Bkg when checkbox is checked, radio is selected, toggle is on.
+// Background when selected (checked checkbox, selected radio button, etc)
+form-bkg-selected ?= form-default-blue
+form-bkg-selected-hover ?= darken(form-bkg-selected, form-hover-darken-factor)
+form-bkg-selected-focus ?= form-bkg-selected
+
 
 // Outline Colors (all fields)
 form-outline-base ?= form-color-base
