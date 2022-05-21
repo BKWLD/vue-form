@@ -120,14 +120,16 @@ export default
 			# * When the user moves focus away from a field
 			@$emit 'update:form', @formData
 
+		# Validate all fields, update data properties (validRatio, valid).
+		# Async, so you must do `await validateForm()`
 		validateForm: ->
 			emitter.emit 'vue-form-validatefields', { id: @id }
 
 			# Wait for the field components to send us results
-			@$defer =>
+			await new Promise (resolve) => @$defer =>
 				# If all fields are valid return true
 				@allFieldsValid = Object.values(@valid).every (val) -> return val
-				return @allFieldsValid
+				resolve @allFieldsValid
 
 		resetForm: (event) ->
 			event.preventDefault()
