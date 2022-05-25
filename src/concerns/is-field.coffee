@@ -18,7 +18,8 @@ export default
 			type: Boolean
 			default: false
 		
-		# For setting the initial value when the field is mounted
+		# For setting the initial value when the field is mounted.
+		# Not required if you're using @value.
 		default: String
 		
 		# External value
