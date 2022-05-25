@@ -15,7 +15,7 @@
 			:aria-label='label'
 			:required='required'
 			:disabled='readonly'
-			v-model='value'
+			v-model='dataValue'
 			v-if='options.length'
 		)
 			option(
@@ -33,7 +33,7 @@
 			slot(name='icon'): svg(height="16" viewBox="0 0 16 16" width="16" xmlns="http://www.w3.org/2000/svg"): path(d="m16 5.5-2-2-6 6-6-6-2 2 8 8z")
 
 		//- Default slot.  Render custom elements inside .select
-		slot(:value='value' :setValue='setValue')
+		slot(:value='dataValue' :setValue='setValue')
 
 	//- Error message (role=alert so SRs read immediately)
 	transition(name='vf-slide'): .vf-error-message(v-if='showError && error' role='alert') {{ error }}
@@ -83,7 +83,7 @@ export default
 
 		classes: -> [
 			...@commonClasses
-			if !!@value then 'has-value' else 'no-value'
+			if !!@dataValue then 'has-value' else 'no-value'
 		]
 
 </script>

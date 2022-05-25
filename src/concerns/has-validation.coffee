@@ -25,7 +25,7 @@ export default
 
 	watch:
 
-		# Each time the field value changes, update @valid and emit @value.
+		# Each time the field value changes, update @valid and emit @dataValue.
 		value: -> 
 			@validate()
 			@sendEvent()
@@ -35,7 +35,7 @@ export default
 			return if @showError
 			if @hasFocus
 				# User has focused in
-				@valueOnFocusIn = @value
+				@valueOnFocusIn = @dataValue
 			else
 				# User has focused out
 				# If the user has edited the field value and focused out, 
@@ -43,13 +43,13 @@ export default
 				# This prevents showing validation errors when the user
 				# tabs through the fields without typing anything, 
 				# or when the user has typed the first character into an email field.
-				if @value != @valueOnFocusIn then @showError = true
+				if @dataValue != @valueOnFocusIn then @showError = true
 
 
 	methods:
 
-		# Update @valid and @error based on the current field @value
-		# Do this by checking if @value satisfies all @rules.
+		# Update @valid and @error based on the current field @dataValue
+		# Do this by checking if @dataValue satisfies all @rules.
 		# Silent=true won't show the validation error to the user.
 		validate: ({silent} = {silent: false}) ->
 
@@ -67,7 +67,7 @@ export default
 				rule = @getRuleFunction ruleArg
 
 				# Run each rule function
-				errorMessage = rule(@value)
+				errorMessage = rule(@dataValue)
 
 				# If no error message provided, use a default message.
 				if errorMessage == false then errorMessage = "Error: This field is invalid"

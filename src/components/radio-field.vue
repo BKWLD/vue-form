@@ -39,7 +39,7 @@ fieldset.vf-field.vf-radio(
 				:value='option.value'
 				:checked='option.value == value'
 				:key='`input${index}`'
-				v-model='value'
+				v-model='dataValue'
 			)
 
 			label.option(
@@ -63,7 +63,7 @@ fieldset.vf-field.vf-radio(
 				.option-label {{ option.label }}
 
 				//- Default slot.  Render custom elements inside .option
-				slot(:value='value' :setValue='setValue')
+				slot(:value='dataValue' :setValue='setValue')
 
 	//- Error message (role=alert so SRs read immediately)
 	transition(name='vf-slide'): .vf-error-message(v-if='showError && error' role='alert') {{ error }}
@@ -113,7 +113,7 @@ export default
 
 		classes: -> [
 			...@commonClasses
-			if !!@value then 'has-value' else 'no-value'
+			if !!@dataValue then 'has-value' else 'no-value'
 		]
 
 </script>

@@ -17,7 +17,7 @@
 			:placeholder='placeholderComputed'
 			:aria-label='label'
 			v-bind='attrs'
-			v-model='value'
+			v-model='dataValue'
 		)
 		
 		.prefix(
@@ -29,11 +29,11 @@
 			v-if='suffix'
 			aria-hidden='true'
 		)
-			div.suffix-value {{ value }}
+			div.suffix-value {{ dataValue }}
 			div.suffix-suffix(v-html='suffixComputed')
 
 		//- Default slot.  Render custom elements inside .input-wrap
-		slot(:value='value' :setValue='setValue')
+		slot(:value='dataValue' :setValue='setValue')
 
 	//- Error message (role=alert so SRs read immediately)
 	transition(name='vf-slide'): .vf-error-message(v-if='showError && error' role='alert') {{ error }}
@@ -111,7 +111,7 @@ export default
 
 		suffixComputed: ->
 			# Hide suffix if the value is blank and there's no placeholder
-			return if @value == ''
+			return if @dataValue == ''
 			# Convert spaces to nbsp, otherwise it would collapse leading spaces
 			@suffix.replaceAll(' ', '&nbsp;')
 

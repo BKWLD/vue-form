@@ -34,11 +34,11 @@
 				:id='name'
 				:aria-label='label'
 				v-bind='attrs'
-				v-model='value'
+				v-model='dataValue'
 			)
 
 		//- Default slot.  Render custom elements inside .input-wrap
-		slot(:value='value' :setValue='setValue')
+		slot(:value='dataValue' :setValue='setValue')
 
 	//- Error message (role=alert so SRs read immediately)
 	transition(name='vf-slide'): .vf-error-message(v-if='showError && error' role='alert') {{ error }}
@@ -88,17 +88,13 @@ export default
 			type: Boolean
 			default: true
 
-	data: ->
-		# Set initial value to @default prop if provided.
-		value: @default || @min
-
 	computed:
 
 		classes: -> [ ...@commonClasses ]
 
-		valueLabel: -> "#{ @prefix || '' }#{ @value }#{ @suffix || '' }"
+		valueLabel: -> "#{ @prefix || '' }#{ @dataValue }#{ @suffix || '' }"
 
-		valueNumber: -> parseFloat @value
+		valueNumber: -> parseFloat @dataValue
 		
 		valueProgress: -> 
 			# Don't divide by zero
@@ -118,6 +114,16 @@ export default
 			min: @min
 			step: @step
 		}
+
+	methods:
+		# Override standard getInitialValue. Last line with @min is added.
+		getInitialValue: ->
+			# Use hardcoded value prop if provided
+			return @value if @value?
+			# Else, use default if provided
+			return @default if @default?
+			return @min
+
 
 </script>
 

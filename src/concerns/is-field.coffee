@@ -18,12 +18,20 @@ export default
 			type: Boolean
 			default: false
 		
-		default:
-			type: String
+		# For setting the initial value when the field is mounted
+		default: String
 		
+		# External value
+		# This is required to support standalone use with v-model.
+		# Standalone usage: `input-field.email( v-model='email' )`
+		# Readonly usage:   `input-field.email( v-model='email' :readonly )`
+		value: String
+
 	data: ->
-		# Set initial value to @default prop if provided.
-		value: @default
+		# Internal value
+		# This is required to support usage without v-model.
+		# Usage: `vue-form: input-field( name='email' )`
+		dataValue: @getInitialValue()
 		
 		hasFocus: false
 
@@ -34,7 +42,7 @@ export default
 		commonClasses: -> [
 			if @showError and !!@error then 'error'
 			if @disabled then 'disabled'
-			if (@value=='' || @value==undefined) then 'no-value' else 'has-value'
+			if (@dataValue=='' || @dataValue==undefined) then 'no-value' else 'has-value'
 		]
 
 	mounted: -> @$defer =>
@@ -50,8 +58,15 @@ export default
 		emitter.off 'vue-form-validatefields', @onValidateFields
 
 	methods:
+		getInitialValue: ->
+			# Use hardcoded value prop if provided
+			return @value if @value?
+			# Else, use default if provided
+			return @default
 
-		setValue: (newValue) -> @value = newValue
+		# Passed as a slot prop.  Allows you to render a slotted element
+		# (like a "default" button) that sets the field's value.
+		setValue: (newValue) -> @dataValue = newValue
 
 		# Focusin handler
 		focusIn: -> 
@@ -59,7 +74,7 @@ export default
 
 		# Focusout handler
 		# We must defer, or else 'document.activeElement' is sometimes 'body'
-		# TODO: figure this out... 100ms is definite code smell
+		# TODO: figure this out, maybe code smell
 		focusOut: (event) -> @$wait 100, () => 
 			@hasFocus = false
 			@validate()
@@ -67,7 +82,7 @@ export default
 
 		# Send our field information to the form component using tiny-emitter
 		sendEvent: ->
-			emitter.emit 'vue-form-fieldupdated', { id: @id, name: @name, value: @value, valid: @valid }
+			emitter.emit 'vue-form-fieldupdated', { id: @id, name: @name, value: @dataValue, valid: @valid }
 
 		# Fired when vue-form emits 'validatefields', which asks all fields to validate their data and return the results.
 		onValidateFields: (args) ->
@@ -92,8 +107,8 @@ export default
 
 	watch:
 		# Emit 'input' event so fields can be used standalone with v-model.
-		# Standalone usage looks like this:
-			# template
-			# 	input-field(v-model='firstName' :default='firstName')`
-			# data: -> firstName: 'Fred'
-		value: -> @$emit 'input', @value
+		# Emit only if our internal @dataValue is out of sync with external @value.
+		dataValue: -> if @dataValue != @value then @$emit 'input', @dataValue
+
+		# When external value prop changes, update our internal dataValue.
+		value: -> @dataValue = @value

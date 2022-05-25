@@ -36,7 +36,7 @@
 			slot(name='label')
 
 		//- Default slot.  Render custom elements inside .checkbox-wrap
-		slot(:value='value' :setValue='setValue')
+		slot(:value='dataValue' :setValue='setValue')
 
 	//- Error message (role=alert so SRs read immediately)
 	transition(name='vf-slide'): .vf-error-message(v-if='error' role='alert') {{ error }}
@@ -61,24 +61,24 @@ export default
 		readOnlyValue: Boolean
 
 	# Sync external v-model
-	data: -> state: @value
+	data: -> state: @dataValue
 
 	computed:
 		classes: -> [
 			'inverted' if @inverted
-			if @value then 'checked' else 'unchecked'
+			if @dataValue then 'checked' else 'unchecked'
 			...@commonClasses
 		]
 
 		# If readOnlyValue provided, then always show that value.
-		computedValue: -> if @readOnlyValue? then @readOnlyValue else @value
+		computedValue: -> if @readOnlyValue? then @readOnlyValue else @dataValue
 
 	methods:
-		# Manually do v-bind (set @value on the @changed event)
-		onChange: (event) -> @value = event.target.checked
+		# Manually do v-bind (set @dataValue on the @changed event)
+		onChange: (event) -> @dataValue = event.target.checked
 
 	watch:
-		value: -> @state = @value
+		value: -> @state = @dataValue
 		state: -> @$emit 'input', @state
 
 </script>
