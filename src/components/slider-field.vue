@@ -32,7 +32,6 @@
 				type='range'
 				:name='name'
 				:id='name'
-				:aria-label='label'
 				v-bind='attrs'
 				v-model='dataValue'
 			)

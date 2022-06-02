@@ -12,7 +12,6 @@
 		select(
 			:id='name'
 			:name='name'
-			:aria-label='label'
 			:required='required'
 			:disabled='readonly'
 			v-model='dataValue'

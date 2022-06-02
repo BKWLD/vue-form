@@ -15,7 +15,6 @@
 			:name='name'
 			:id='name'
 			:placeholder='placeholderComputed'
-			:aria-label='label'
 			v-bind='attrs'
 			v-model='dataValue'
 		)
