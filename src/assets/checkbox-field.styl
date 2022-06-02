@@ -36,8 +36,10 @@
 
 	input[type=checkbox]
 		// Must not be display:none in order to be tabbable
-		opacity 0
-		width 0
+		position absolute
+		width form-checkbox-size
+		height form-checkbox-size
+		opacity 0.00001
 
 	.label
 		padding-top 5px // Vertically center the first line of text with the checkbox

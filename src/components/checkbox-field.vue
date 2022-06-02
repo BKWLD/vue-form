@@ -1,4 +1,7 @@
-<!-- A standard checkbox input -->
+<!--
+	A standard checkbox input
+	Some inspiration from https://www.sarasoueidan.com/blog/inclusively-hiding-and-styling-checkboxes-and-radio-buttons/
+-->
 
 <template lang='pug'>
 
@@ -21,7 +24,7 @@
 		)
 		
 		//- Visual checkbox
-		.checkbox-bkg
+		.checkbox-bkg(aria-hidden='true' focusable='false')
 			.checkbox-icon
 
 				//- Icon slot.  Replace the default icon with your own.
