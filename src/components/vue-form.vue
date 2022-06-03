@@ -31,18 +31,22 @@ export default
 	name: 'VueForm'
 
 	# Provide @id to form fields so that they can include @id with their tiny-emitter events.
-	provide: ->
-		id: @id
+	provide: -> id: @id
 
 	props:
+
 		# @id must be unique from all other forms on this page.
 		# We include @id on all tiny-emitter events and use it to ignore events 
 		# emitted by other forms that might be on this page.
 		id:
 			type: String
+		
 		# Submit callback function
+		# The is a prop instead of an emitted event so that we can await on an async submit function,
+		# catch errors, and show UI feedback if an error happened if desired.
 		submit:
 			type: Function
+
 		# Form data object.  For syncing to parent component data, if desired.
 		form:
 			type: Object
@@ -134,12 +138,10 @@ export default
 					console.warn('vue-form: Submit callback threw error:')
 					console.warn(errorArg)
 
-		onFieldUpdated: (args) ->
-			{ id, name, value, valid } = args
-
+		onFieldUpdated: ({ id, name, value, valid, errorShown, config }) ->
 			# Do nothing if this event was emitted from a different form.
 			return if id != @id
-
+			
 			# Save our field's latest value
 			Vue.set @formData, name, value
 			Vue.set @formDataValid, name, valid
