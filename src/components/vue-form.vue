@@ -54,8 +54,10 @@ export default
 	data: ->
 		# Boolean states
 		submitting: false
-		error: false
 		success: false
+		
+		# If our submit callback threw an error.  Either false, or the string error message.
+		error: false
 
 		# Data entered into each field.  Object with field name keys.
 		formData: {}
@@ -133,10 +135,13 @@ export default
 					@submitting = true
 					await @submit(@formData)
 					@success = true
-				catch errorArg
-					@error = true
+				catch error
+					# Set @error to error, or true if error is falsy
+					@error = error or true
 					console.warn('vue-form: Submit callback threw error:')
-					console.warn(errorArg)
+					console.warn(error)
+					# Emit 'error' and pass the error message so parent can v-bind a handler
+					@$emit 'error', error
 
 		onFieldUpdated: ({ id, name, value, valid, errorShown, config }) ->
 			# Do nothing if this event was emitted from a different form.
