@@ -17,7 +17,7 @@ Build your form:
 vue-form(
   id='newsletter'
   :submit='onSubmit'
-  #default="{success, error, hasValidationErrors, submitting, submitted}"
+  #default="{success, error, submitting, submitted}"
 )
   
   //- Form message
