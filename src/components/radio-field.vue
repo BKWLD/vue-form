@@ -66,7 +66,7 @@ fieldset.vf-field.vf-radio(
 				slot(:value='dataValue' :setValue='setValue')
 
 	//- Error message (role=alert so SRs read immediately)
-	transition(name='vf-slide'): .vf-error-message(v-if='showError && error' role='alert') {{ error }}
+	transition(name='vf-slide'): .vf-error-message(v-if='errorShown' role='alert') {{ error }}
 
 </template>
 

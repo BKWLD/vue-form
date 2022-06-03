@@ -18,11 +18,16 @@ export default
 		# Validation error message
 		error: ''
 
-		# If we should show the validation error
-		showError: false
+		# If we should show validation errors
+		# We could use @valid to show errors, but let's show restraint and
+		# hide errors until the user has had a chance to input valid data.
+		canShowErrors: false
 
-		# The field's value when the user focuses in
+		# The field's value when the user focuses in (used by canShowErrors)
 		valueOnFocusIn: null
+
+	computed:
+		errorShown: -> @canShowErrors and !!@error
 
 	watch:
 
@@ -31,9 +36,10 @@ export default
 			@validate()
 			@sendEvent()
 
-		# ShowError logic
-		hasFocus: ->
-			return if @showError
+		# canShowErrors logic
+		hasFocus: ->			
+			return if @canShowErrors
+
 			if @hasFocus
 				# User has focused in
 				@valueOnFocusIn = @dataValue
@@ -41,10 +47,7 @@ export default
 				# User has focused out
 				# If the user has edited the field value and focused out, 
 				# then start allowing the field to show validation errors.
-				# This prevents showing validation errors when the user
-				# tabs through the fields without typing anything, 
-				# or when the user has typed the first character into an email field.
-				if @dataValue != @valueOnFocusIn then @showError = true
+				if @dataValue != @valueOnFocusIn then @canShowErrors = true
 
 
 	methods:

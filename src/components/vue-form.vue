@@ -1,19 +1,23 @@
 <!--  -->
 
 <template lang='pug'>
+
 form.vf-form(
 	v-on:submit.prevent='onSubmit'
-	:id='id'
-)
+	:id='id')
+
 	slot(
 		:submitting='submitting'
 		:submitted='submitted'
 		:success='success'
 		:error='error'
-		:has-validation-errors='hasValidationErrors'
 		:form='form'
-		:resetForm='resetForm'
-	)
+		:form-data-valid='formDataValid'
+		:all-fields-valid='allFieldsValid'
+		:has-errors-shown='hasErrorsShown'
+		:num-errors-shown='numErrorsShown'
+		:errors-shown-labels='errorsShownLabels'
+		:resetForm='resetForm')
 
 </template>
 
@@ -48,12 +52,20 @@ export default
 		submitting: false
 		error: false
 		success: false
-		hasValidationErrors: false
-		allFieldsValid: false # Can't be computed prop of @valid because object keys created at runtime aren't reactive
 
-		# Field states (objects keyed by field name)
-		formData: {} # Form field data
-		valid: {} # Whether field values are valid (booleans)
+		# Data entered into each field.  Object with field name keys.
+		formData: {}
+
+		# Whether the fields have valid input. Object with field name keys and boolean values.
+		# This object is accurate immediately upon mounted.
+		formDataValid: {}
+
+		# Validation errors visibly shown on the front end.  Object with field name keys
+		# and values of string or false.
+		formDataErrorsShown: {}
+
+		# Configuration info for each field
+		formDataConfig: {}
 
 	computed:
 		
@@ -62,14 +74,35 @@ export default
 		
 		submitted: -> @error || @success
 
+		# Number of fields in this form
+		numFields: -> @fieldIds?.length || 0
+
+		# Number of fields in this form with valid input
+		numValidFields: -> 
+			Object.values @formDataValid
+				.filter (value) => return !!value
+				.length
+
+		# Number of validation errors visibly shown to the user
+		numErrorsShown: ->
+			Object.values @formDataErrorsShown
+				.filter (value) => return !!value
+				.length
+
+		hasErrorsShown: -> !!@numErrorsShown
+
+		errorsShownLabels: ->
+			result = []
+			for key in Object.keys @formDataErrorsShown
+				continue unless @formDataErrorsShown[key]
+				result.push @formDataConfig[key]?.label
+			result
+
 		# Number, zero to one, representing the ratio of fields with valid input.
-		validRatio: ->
-			# Array of booleans representing each field's validity
-			allFields = Object.values @valid
-			return 0 unless allFields?.length
-			validFields = allFields.filter (value) => return !!value
-			result = validFields?.length / allFields?.length
-			return result
+		# Useful for showing a visual progress bar or similar.
+		validRatio: -> @numValidFields / @numFields
+
+		allFieldsValid: -> @validRatio == 1
 
 	mounted: ->
 		# Subscribe to child events
@@ -87,7 +120,7 @@ export default
 			@$emit 'update:form', @formData
 
 			# Check if all fields are valid
-			@hasValidationErrors = @validateForm()
+			@validateForm()
 
 			# Wait for the field components to send us results
 			@$defer =>
@@ -107,11 +140,11 @@ export default
 			# Do nothing if this event was emitted from a different form.
 			return if id != @id
 
-			# console.log 'fieldEvent', {id, name, value, valid}
-			
 			# Save our field's latest value
-			@formData[name] = value
-			Vue.set @valid, name, valid
+			Vue.set @formData, name, value
+			Vue.set @formDataValid, name, valid
+			Vue.set @formDataErrorsShown, name, errorShown
+			Vue.set @formDataConfig, name, config
 			
 			# Emit our form data to the parent Vue component
 			# We emit for these events:
@@ -120,16 +153,8 @@ export default
 			# * When the user moves focus away from a field
 			@$emit 'update:form', @formData
 
-		# Validate all fields, update data properties (validRatio, valid).
-		# Async, so you must do `await validateForm()`
-		validateForm: ->
-			emitter.emit 'vue-form-validatefields', { id: @id }
-
-			# Wait for the field components to send us results
-			await new Promise (resolve) => @$defer =>
-				# If all fields are valid return true
-				@allFieldsValid = Object.values(@valid).every (val) -> return val
-				resolve @allFieldsValid
+		# Validate all fields
+		validateForm: -> emitter.emit 'vue-form-validatefields', { id: @id }
 
 		resetForm: (event) ->
 			event.preventDefault()

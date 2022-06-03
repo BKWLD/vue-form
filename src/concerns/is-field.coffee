@@ -42,7 +42,7 @@ export default
 
 	computed:
 		commonClasses: -> [
-			if @showError and !!@error then 'error'
+			if @errorShown then 'error'
 			if @disabled then 'disabled'
 			if (@dataValue=='' || @dataValue==undefined) then 'no-value' else 'has-value'
 		]
@@ -96,15 +96,14 @@ export default
 			# Do nothing if this event was emitted from a different form.
 			return if id != @id
 
-			# Form component has asked us to validate our input
-			# Show validation errors
-			@showError = true
-			# Clear the error, wait a tick, then validate.
-			# This is a hacky way to force the error messages to re-animate and get the user's attention.
+			# Show validation errors, in case they were hidden.
+			@canShowErrors = true
+			# Clear existing errors
 			@error = ''
-			@$nextTick => 
-				@validate()
-				@sendEvent()
+			# Validate our input
+			@validate()
+			# Send our updated validation status to the form.
+			@sendEvent()
 
 		# Pass through @click listener
 		onClick: (event) ->
