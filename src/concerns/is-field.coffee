@@ -1,4 +1,5 @@
 import emitter from 'tiny-emitter/instance'
+import throttle from 'lodash.throttle'
 
 # Common logic for all fields
 export default
@@ -83,7 +84,10 @@ export default
 
 		# Send our field information to the form component using tiny-emitter
 		sendEvent: ->
-			emitter.emit 'vue-form-fieldupdated', { id: @id, name: @name, value: @dataValue, valid: @valid }
+		# Throttled version
+		sendEventThrottled: throttle ->
+			@sendEvent()
+		, 500
 
 		# Fired when vue-form emits 'validatefields', which asks all fields to validate their data and return the results.
 		onValidateFields: (args) ->
@@ -107,9 +111,20 @@ export default
 			@$listeners?.click?()
 
 	watch:
-		# Emit 'input' event so fields can be used standalone with v-model.
-		# Emit only if our internal @dataValue is out of sync with external @value.
-		dataValue: -> if @dataValue != @value then @$emit 'input', @dataValue
+		
+		# When our field data changes
+		dataValue: ->
+			# If our internal @dataValue is out of sync with external @value,
+			# then emit 'input' event.  Required for standalone use with v-model.
+			if @dataValue != @value then @$emit 'input', @dataValue
+
+			# Validate the latest input.
+			@validateThrottled()
+
+			# Sync our data to the form.  
+			# Use throttled function so we don't get bogged down when typing fast into a text field.
+			@sendEventThrottled()
 
 		# When external value prop changes, update our internal dataValue.
+		# Required for standalone use with v-model.
 		value: -> @dataValue = @value

@@ -1,4 +1,5 @@
 import { required, email, url, notUrl, ipAddress, notIpAddress } from '../services/validators'
+import throttle from 'lodash.throttle'
 
 export default
 	props:
@@ -82,6 +83,11 @@ export default
 			# We passed validation
 			@error = ''
 			@valid = true
+
+		# Throttled version
+		validateThrottled: throttle ->
+			@validate()
+		, 500
 
 		# Look up validator function from a string
 		getRuleFunction: (rule) ->
