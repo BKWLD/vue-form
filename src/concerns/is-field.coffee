@@ -50,7 +50,7 @@ export default
 	mounted: -> @$defer =>
 		# Defer so that the parent vue-form component is mounted and ready to receive our events.
 		# Send the form our name, value, and validation status.
-		@validate({ silent: true })
+		@validate()
 		@sendEvent()
 		# Listen for events emitted by the form component
 		emitter.on 'vue-form-validatefields', @onValidateFields

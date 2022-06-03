@@ -51,8 +51,7 @@ export default
 
 		# Update @valid and @error based on the current field @dataValue
 		# Do this by checking if @dataValue satisfies all @rules.
-		# Silent=true won't show the validation error to the user.
-		validate: ({silent} = {silent: false}) ->
+		validate: ->
 
 			# If no validation rules, always valid.
 			if !@rules?.length
@@ -75,7 +74,6 @@ export default
 
 				# On first validation failure, save errorMessage and stop the whole function.
 				if errorMessage != true
-					if silent then @showError = false
 					@error = errorMessage
 					@valid = false
 					return
