@@ -84,6 +84,18 @@ export default
 
 		# Send our field information to the form component using tiny-emitter
 		sendEvent: ->
+			emitter.emit 'vue-form-fieldupdated',
+				id: @id
+				name: @name
+				value: @dataValue
+				valid: @valid
+				errorShown: if @errorShown then @error else ''
+				config:
+					label: @label
+					required: @required
+					readonly: @readonly
+					disabled: @disabled
+
 		# Throttled version
 		sendEventThrottled: throttle ->
 			@sendEvent()
