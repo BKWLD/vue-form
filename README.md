@@ -7,8 +7,9 @@
 
 ## Getting Started
 
-Add this to `nuxt.config.coffee`, so that vue-form's components are registered globally in Nuxt:
+Add this to `nuxt.config.coffee`:
 ```coffee
+modules: ['vue-form/module']
 buildModules: ['@nuxt/components', 'vue-form/nuxt']
 ```
 

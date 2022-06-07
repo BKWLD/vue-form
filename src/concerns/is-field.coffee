@@ -84,6 +84,21 @@ export default
 
 		# Send our field information to the form component using tiny-emitter
 		sendEvent: ->
+
+			# Update store
+			@$store.commit 'forms/setField',
+				id: @id
+				name: @name
+				data: @dataValue
+				valid: @valid
+				errorShown: if @errorShown then @error else ''
+				config:
+					label: @label
+					required: @required
+					readonly: @readonly
+					disabled: @disabled
+
+			# Emit event (legacy)
 			emitter.emit 'vue-form-fieldupdated',
 				id: @id
 				name: @name
