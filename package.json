@@ -1,5 +1,5 @@
 {
-  "name": "vue-form",
+  "name": "@bkwld/vue-form",
   "version": "0.0.1",
   "description": "Vue 2 forms supporting easy styling, accessibility, and validation.",
   "main": "index.vue",

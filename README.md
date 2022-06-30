@@ -9,8 +9,8 @@
 
 Add this to `nuxt.config.coffee`:
 ```coffee
-modules: ['vue-form/module']
-buildModules: ['@nuxt/components', 'vue-form/nuxt']
+modules: ['@bkwld/vue-form/module']
+buildModules: ['@nuxt/components', '@bkwld/vue-form/nuxt']
 ```
 
 Build your form:
@@ -82,7 +82,7 @@ To import vue-form's Stylus stylesheet and create a theme:
   form-bkg-base = grey
   
   // Import vue-form styles
-  @import '~vue-form/index.styl'
+  @import '~@bkwld/vue-form/index.styl'
 ```
 
 ## Validation
