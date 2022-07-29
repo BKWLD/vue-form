@@ -18,6 +18,7 @@
 			:autocapitalize='autocapitalize'
 			:minlength='minlength'
 			:maxlength='maxlength'
+			:aria-describedby='name + "-error-message"'
 			v-model='value'
 		)
 
@@ -27,7 +28,7 @@
 		slot
 
 	//- Error message (role=alert so SRs read immediately)
-	transition(name='vf-slide'): .vf-error-message(v-if='error && !tooltipActive' role='alert') {{ error }}
+	transition(name='vf-slide'): .vf-error-message(:id='name + "-error-message"' v-if='error && !tooltipActive' role='alert') {{ error }}
 	//- Tooltip message
 	transition(name='vf-slide'): .vf-tooltip-message(v-if='tooltipActive') {{ tooltip }}
 </template>
