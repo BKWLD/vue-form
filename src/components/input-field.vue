@@ -22,7 +22,7 @@
 			v-model='value'
 		)
 
-		tooltip-btn(v-if='tooltip' :tooltipActive='tooltipActive' @click.native='tooltipClick')
+		tooltip-btn(v-if='tooltip' :tooltipActive='tooltipActive' @click.native='tooltipClick' :accessible-label="tooltipAccessibleLabel")
 
 		//- Default slot.  Lets you render extra buttons etc inside .input-wrap
 		slot
@@ -79,6 +79,8 @@ export default
 		maxlength:
 			type: String
 			default: '100'
+
+		tooltipAccessibleLabel: type: String
 
 	computed:
 		classes: -> [
