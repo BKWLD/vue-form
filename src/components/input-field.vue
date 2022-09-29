@@ -30,7 +30,7 @@
 	//- Error message (role=alert so SRs read immediately)
 	transition(name='vf-slide'): .vf-error-message(:id='name + "-error-message"' v-if='error && !tooltipActive' role='alert') {{ error }}
 	//- Tooltip message
-	transition(name='vf-slide'): .vf-tooltip-message(v-if='tooltipActive' aria-label="Additional information") {{ tooltip }}
+	transition(name='vf-slide'): .vf-tooltip-message(v-if='tooltipActive') {{ tooltip }}
 </template>
 
 <!-- ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– -->
