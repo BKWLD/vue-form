@@ -23,7 +23,7 @@
 				svg(viewBox="0 0 44.27 33.51" xmlns="http://www.w3.org/2000/svg"): path(d="m12.24 33.51a2.25 2.25 0 0 1 -1.58-.64l-10-9.82a2.25 2.25 0 0 1 3.16-3.21l8.41 8.27 28.22-27.47a2.25 2.25 0 1 1 3.14 3.22l-29.78 29a2.24 2.24 0 0 1 -1.57.65z")
 
 		//- Label
-		.label(@click='onClick') {{ label }}
+		.label {{ label }}
 
 			tooltip-btn(v-if='tooltip' :tooltipActive='tooltipActive' @click.native='tooltipClick')
 
@@ -71,6 +71,13 @@ export default
 	methods:
 		# Manually do v-bind (set @value on the @changed event)
 		onChange: (event) -> @value = event.target.checked
+
+		# Pass through @click listener
+		onClick: (event) ->
+			event.stopPropagation()
+			event.preventDefault()
+			@$listeners?.click?()
+			@value = 
 
 	watch:
 		value: -> @state = @value
