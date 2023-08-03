@@ -87,4 +87,6 @@ export default
 
 		# Pass through @click listener
 		onClick: (event) ->
+			event.stopPropagation()
+			event.preventDefault()
 			@$listeners?.click?()
