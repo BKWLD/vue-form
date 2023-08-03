@@ -52,8 +52,9 @@ export default
 
 	methods:
 		tooltipClick: (event) ->
-			@tooltipActive = !@tooltipActive
 			event.preventDefault()
+			event.stopPropagation()
+			@tooltipActive = !@tooltipActive
 
 		# Focusout handler
 		# We must defer, or else 'document.activeElement' is sometimes 'body'
