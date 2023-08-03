@@ -18,6 +18,14 @@
 		background form-bkg-base
 		cursor pointer
 
+		// Hover state
+		@media (hover hover)
+			background form-bkg-hover
+			outline-color form-outline-hover
+
+			.checkbox-icon svg path
+				fill form-color-hover
+
 	.checkbox-icon
 		display block
 		position absolute
@@ -57,16 +65,6 @@
 	input.focus-visible ~ .checkbox-bkg
 		outline-color form-outline-focus
 		background form-bkg-hover
-
-	// Hover state
-	@media (hover hover)
-		.checkbox-wrap:hover
-			.checkbox-bkg
-				background form-bkg-hover
-				outline-color form-outline-hover
-
-			.checkbox-icon svg path
-				fill form-color-hover
 
 	// Error state
 	&.error
