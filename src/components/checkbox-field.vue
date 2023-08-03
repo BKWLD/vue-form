@@ -68,6 +68,10 @@ export default
 		# If readOnlyValue provided, then always show that value.
 		computedValue: -> if @readOnlyValue? then @readOnlyValue else @value
 
+	mounted: -> 
+		console.log 'checkbox field mounted, el is', @$el
+		console.log 'listeners are', @$listeners
+
 	methods:
 		# Manually do v-bind (set @value on the @changed event)
 		onChange: (event) -> @value = event.target.checked
@@ -75,7 +79,6 @@ export default
 		# Pass through @click listener
 		onClick: (event) ->
 			event.stopPropagation()
-			event.preventDefault()
 			@$listeners?.click?()
 
 	watch:
