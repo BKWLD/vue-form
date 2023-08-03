@@ -77,7 +77,6 @@ export default
 			event.stopPropagation()
 			event.preventDefault()
 			@$listeners?.click?()
-			@value = 
 
 	watch:
 		value: -> @state = @value
